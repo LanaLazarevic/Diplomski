@@ -33,6 +33,10 @@ namespace PFM.Domain.Entities
 
         public Category? Category { get; set; }
 
+        public Guid CardId { get; set; }
+
+        public Card Card { get; set; }
+
         public List<Split>? Splits { get; set; } = [];
     }
 }

@@ -22,6 +22,10 @@ namespace PFM.Infrastructure.Persistence.DbContexts
 
         public DbSet<Split> Splits { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<Card> Cards { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -46,6 +50,8 @@ namespace PFM.Infrastructure.Persistence.DbContexts
             modelBuilder.ApplyConfiguration(new CategoryEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new TransactionEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new SplitEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new CardEntityTypeConfiguration());
         }
         
      
