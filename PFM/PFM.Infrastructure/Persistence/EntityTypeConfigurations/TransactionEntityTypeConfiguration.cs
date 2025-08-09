@@ -76,6 +76,16 @@ namespace PFM.Infrastructure.Persistence.EntityTypeConfigurations
                    .WithMany(c => c.Transactions)
                    .HasForeignKey(t => t.CatCode)
                    .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Property(t => t.CardId)
+                   .HasColumnName("card_id")
+                   .IsRequired();
+
+            builder.HasOne(t => t.Card)
+                   .WithMany(c => c.Transactions)
+                   .HasForeignKey(t => t.CardId)
+                   .OnDelete(DeleteBehavior.Restrict)
+                   .IsRequired();
         }
     }
 }

@@ -28,7 +28,7 @@ namespace PFM.Infrastructure.Persistence.Repositories
 
         public async Task<PagedList<Transaction>> GetTransactionsAsync(TransactionQuerySpecification spec)
         {
-            var query = _ctx.Transactions.Include(t=>t.Splits).AsQueryable();
+            var query = _ctx.Transactions.Include(t => t.Splits).Include(t => t.Card).AsQueryable();
 
             if (spec.StartDate.HasValue)
                 query = query.Where(t => t.Date >= spec.StartDate.Value);
@@ -122,6 +122,7 @@ namespace PFM.Infrastructure.Persistence.Repositories
         {
             return await _ctx.Transactions
                          .Include(t => t.Category)
+                         .Include(t => t.Card)
                          .FirstOrDefaultAsync(t => t.Id == id, ct);
         }
 
