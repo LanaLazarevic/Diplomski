@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PFM.Infrastructure.Persistence.DbContexts;
@@ -11,9 +12,11 @@ using PFM.Infrastructure.Persistence.DbContexts;
 namespace PFM.Infrastructure.Migrations
 {
     [DbContext(typeof(PFMDbContext))]
-    partial class PFMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250809163445_AddUserAndCardTable")]
+    partial class AddUserAndCardTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,10 +231,6 @@ namespace PFM.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("phone_number");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("integer")
-                        .HasColumnName("role");
 
                     b.HasKey("Id");
 

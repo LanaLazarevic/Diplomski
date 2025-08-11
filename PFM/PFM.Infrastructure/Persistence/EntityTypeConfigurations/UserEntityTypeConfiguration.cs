@@ -56,6 +56,10 @@ namespace PFM.Infrastructure.Persistence.EntityTypeConfigurations
                 .HasColumnName("birthday")
                 .HasColumnType("date")
                 .IsRequired();
+
+            builder.Property(u => u.Role)
+                .HasColumnName("role")
+                .IsRequired();
         }
     }
 }
