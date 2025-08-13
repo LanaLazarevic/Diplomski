@@ -26,6 +26,8 @@ namespace PFM.Domain.Entities
 
         public DateOnly Birthday { get; set; }
 
+        public string Jmbg { get; set; }
+
         public RoleEnum Role { get; set; }
 
         public List<Card>? Cards { get; set; } = [];
