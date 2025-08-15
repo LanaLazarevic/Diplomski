@@ -1,4 +1,5 @@
-﻿using PFM.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PFM.Domain.Entities;
 using PFM.Domain.Interfaces;
 using PFM.Infrastructure.Persistence.DbContexts;
 using System;
@@ -21,6 +22,11 @@ namespace PFM.Infrastructure.Persistence.Repositories
         public void Add(User user)
         {
             _ctx.Users.Add(user);
+        }
+
+        public async Task<User?> GetByEmailAsync(string email, CancellationToken ct = default)
+        {
+            return await _ctx.Users.SingleOrDefaultAsync(u => u.Email == email, ct);
         }
     }
 }

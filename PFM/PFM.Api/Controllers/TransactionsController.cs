@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NPOI.SS.UserModel;
 using Org.BouncyCastle.Ocsp;
@@ -104,6 +105,7 @@ namespace PFM.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Get()
         { 
             var (queryModel, errors) = GetAllTransactionQueryValidationHelper.ParseAndValidate(Request.Query);
@@ -153,6 +155,7 @@ namespace PFM.Api.Controllers
         OperationId = "Transactions_Categorize",
         Summary = "Categorize a single transaction",
         Description = "Assigns the given category code to the transaction with the specified ID.")]
+        [Authorize]
         public async Task<IActionResult> Categorize(
         [FromRoute] string id,
         [FromBody] CategorizeTransactionRequest req)
@@ -233,6 +236,7 @@ namespace PFM.Api.Controllers
         [SwaggerOperation(OperationId = "Transactions_Split",
         Summary = "Split transaction by id",
         Description = "Splits transaction by id of the transaction")]
+        [Authorize]
         public async Task<ActionResult> Split([FromRoute] string id)
         {
             using var reader = new StreamReader(Request.Body);
@@ -311,6 +315,7 @@ namespace PFM.Api.Controllers
 
         [HttpPost("auto-categorize")]
         [SwaggerOperation(OperationId = "Transactions_AutoCategorize", Summary = "Auto categorize transactions", Description = "Auto categorizes transactions")]
+        [Authorize]
         public async Task<IActionResult> AutoCategorize()
         {
             var result = await _mediator.Send(new AutoCategorizeTransactionsCommand());

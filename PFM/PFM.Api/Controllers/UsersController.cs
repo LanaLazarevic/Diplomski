@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PFM.Application.Dto;
 using PFM.Application.Result;
-using PFM.Application.UseCases.Users.Commands;
+using PFM.Application.UseCases.Users.Commands.CreateUser;
 
 namespace PFM.Api.Controllers
 {

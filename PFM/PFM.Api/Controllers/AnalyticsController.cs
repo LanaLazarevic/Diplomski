@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PFM.Api.Validation;
 using PFM.Application.Result;
@@ -22,6 +23,7 @@ namespace PFM.Api.Controllers
             Summary = "Retrieve spending analytics by category or by subcategories within category",
             Description = "Retrieves spending analytics by category or by subcategories within category"
         )]
+        [Authorize]
         public async Task<IActionResult> Get()
         {
             var (queryModel, errors) = AnalyticsQueryValidationHelper.ParseAndValidate(Request.Query);
@@ -56,7 +58,7 @@ namespace PFM.Api.Controllers
                 }
 
 
-                    return StatusCode(op.code, error);
+                 return StatusCode(op.code, error);
 
             }
 

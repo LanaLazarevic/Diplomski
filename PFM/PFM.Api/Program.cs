@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using PFM.Api.Extensions;
 using PFM.Api.Formatters;
 using PFM.Api.Swagger;
 using PFM.Application.Mapping;
@@ -12,6 +13,7 @@ using SixLabors.ImageSharp;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PFMDbContext>();
 builder.Services.AddInfrastructureServices();
+builder.Services.AddJwtAuth(builder.Configuration);
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddMaps(typeof(TransactionMappingProfile).Assembly);
@@ -81,6 +83,7 @@ app.UseCors("cors");
 
 
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
