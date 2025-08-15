@@ -4,6 +4,8 @@
     {
         ITransactionRepository Transactions { get; }
         ICategoryRepository Categories { get; }
+        IUserRepository Users { get; }
+
         Task SaveChangesAsync();
         Task SaveChangesAsync(CancellationToken cancellationToken);
     }

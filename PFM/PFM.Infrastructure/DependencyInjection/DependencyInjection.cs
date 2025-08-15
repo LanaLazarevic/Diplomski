@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using PFM.Application.Dto;
 using PFM.Application.Interfaces;
 using PFM.Application.UseCases.Analytics.Queries.GetSpendingAnalytics;
 using PFM.Application.UseCases.Transaction.Queries.GetAllTransactions;
@@ -23,9 +24,11 @@ namespace PFM.Infrastructure.DependencyInjection
            
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IValidator<GetTransactionsQuery>, GetTransactionsQueryValidator>();
             services.AddScoped<IValidator<GetSpendingsAnalyticsQuery>, GetSpendingsAnalyticsQueryValidator>();
+            services.AddScoped<IValidator<CreateUserDto>, CreateUserDtoValidator>();
             services.AddScoped<ITransactionImportLogger, FileTransactionImportLogger>();
             services.AddScoped<IAutoCategorizationService, AutoCategorizationService>();
             return services;

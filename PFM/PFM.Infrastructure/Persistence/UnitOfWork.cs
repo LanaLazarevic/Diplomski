@@ -11,15 +11,19 @@ namespace PFM.Infrastructure.Persistence;
         private readonly PFMDbContext _context;
         private readonly ITransactionRepository _txRepo;
         private readonly ICategoryRepository _catRepo;
+        private readonly IUserRepository _userRepo;
 
         public ITransactionRepository Transactions => _txRepo;
         public ICategoryRepository Categories => _catRepo;
-        public UnitOfWork(PFMDbContext context, ITransactionRepository txRepo, ICategoryRepository catRepo)
+        public IUserRepository Users => _userRepo;
+
+        public UnitOfWork(PFMDbContext context, ITransactionRepository txRepo, ICategoryRepository catRepo, IUserRepository userRepo)
         {
             _context = context;
             _txRepo = txRepo;
             _catRepo = catRepo;
-        }
+            _userRepo = userRepo;
+    }
 
         public async Task SaveChangesAsync()
         {
