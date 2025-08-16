@@ -57,6 +57,9 @@ namespace PFM.Infrastructure.Persistence.EntityTypeConfigurations
                 .HasMaxLength(13)
                 .IsRequired();
 
+            builder.HasIndex(u => u.Jmbg)
+                .IsUnique();
+
             builder.Property(u => u.Birthday)
                 .HasColumnName("birthday")
                 .HasColumnType("date")

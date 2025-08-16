@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PFM.Application.Dto;
 using PFM.Application.Result;
 using PFM.Application.UseCases.Users.Commands.CreateUser;
+using PFM.Domain.Enums;
 
 namespace PFM.Api.Controllers
 {
@@ -19,6 +21,7 @@ namespace PFM.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = nameof(RoleEnum.admin))]
         public async Task<IActionResult> Create([FromBody] CreateUserDto request)
         {
             var cmd = new CreateUserCommand(request);

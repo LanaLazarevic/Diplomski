@@ -12,6 +12,7 @@ using PFM.Application.UseCases.Transaction.Commands.Import;
 using PFM.Application.UseCases.Transaction.Commands.SplitTransaction;
 using PFM.Application.UseCases.Transaction.Queries.GetAllTransactions;
 using PFM.Domain.Dtos;
+using PFM.Domain.Enums;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Text.Json;
 
@@ -32,6 +33,7 @@ namespace PFM.Api.Controllers
         [SwaggerOperation(OperationId = "Transactions_Import", Summary = "Import transactions", Description = "Imports transactions via CSV")]
         [HttpPost("import")]
         [Consumes("application/csv")]
+        [Authorize(Roles = nameof(RoleEnum.admin))]
         public async Task<IActionResult> Import([FromBody] ImportTransactionsCommand command)
         {
             if (!ModelState.IsValid)

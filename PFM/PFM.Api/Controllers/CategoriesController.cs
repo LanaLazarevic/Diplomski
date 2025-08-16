@@ -9,6 +9,7 @@ using PFM.Application.UseCases.Categories.Queries.CetAllCategories;
 using PFM.Application.UseCases.Transaction.Commands.AutoCategorization;
 using PFM.Application.UseCases.Transaction.Commands.Import;
 using PFM.Domain.Entities;
+using PFM.Domain.Enums;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
@@ -30,6 +31,7 @@ namespace PFM.Api.Controllers
                   Description = "Imports categories via CSV")]
         [HttpPost("import")]
         [Consumes("application/csv")]
+        [Authorize(Roles = nameof(RoleEnum.admin))]
         public async Task<IActionResult> Import([FromBody] ImportCategoriesCommand cmd)
         {
 

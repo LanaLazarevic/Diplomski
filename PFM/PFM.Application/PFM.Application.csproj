@@ -23,4 +23,8 @@
     <ProjectReference Include="..\PFM.Domain\PFM.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\Cards\Commands\CreateCard\" />
+  </ItemGroup>
+
 </Project>

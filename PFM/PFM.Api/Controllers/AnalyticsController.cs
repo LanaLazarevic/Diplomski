@@ -10,6 +10,7 @@ namespace PFM.Api.Controllers
 {
     [Route("spending-analytics")]
     [ApiController]
+    [Authorize]
     public class AnalyticsController : ControllerBase
     {
         private readonly IMediator _mediator;

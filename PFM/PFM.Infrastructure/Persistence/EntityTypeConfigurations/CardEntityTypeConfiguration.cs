@@ -47,6 +47,10 @@ namespace PFM.Infrastructure.Persistence.EntityTypeConfigurations
                 .HasColumnName("user_id")
                 .IsRequired();
 
+            builder.Property(c => c.CardType)
+                .HasColumnName("card_type")
+                .IsRequired();
+
             builder.HasOne(c => c.User)
                 .WithMany(u => u.Cards)
                 .HasForeignKey(c => c.UserId)

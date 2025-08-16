@@ -1,3 +1,4 @@
+using PFM.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace PFM.Domain.Entities
         public double AvailableAmount { get; set; }
 
         public double ReservedAmount { get; set; }
+
+        public CardTypeEnum CardType { get; set; }
 
         public Guid UserId { get; set; }
 
