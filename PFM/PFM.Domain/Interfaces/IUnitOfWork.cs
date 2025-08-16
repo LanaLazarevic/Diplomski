@@ -6,6 +6,8 @@
         ICategoryRepository Categories { get; }
         IUserRepository Users { get; }
 
+        ICardRepository Cards { get; }
+
         Task SaveChangesAsync();
         Task SaveChangesAsync(CancellationToken cancellationToken);
     }

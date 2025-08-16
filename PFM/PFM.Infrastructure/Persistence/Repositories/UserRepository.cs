@@ -28,5 +28,10 @@ namespace PFM.Infrastructure.Persistence.Repositories
         {
             return await _ctx.Users.SingleOrDefaultAsync(u => u.Email == email, ct);
         }
+
+        public async Task<User?> GetByIdAsync(Guid id, CancellationToken ct = default)
+        {
+            return await _ctx.Users.FindAsync(new object?[] { id }, ct);
+        }
     }
 }

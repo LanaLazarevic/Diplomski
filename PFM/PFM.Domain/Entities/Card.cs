@@ -15,7 +15,7 @@ namespace PFM.Domain.Entities
 
         public string CardNumber { get; set; }
 
-        public DateTime ExpirationDate { get; set; }
+        public DateOnly ExpirationDate { get; set; }
 
         public double AvailableAmount { get; set; }
 

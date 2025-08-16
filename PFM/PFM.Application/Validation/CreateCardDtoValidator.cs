@@ -1,0 +1,46 @@
+﻿using FluentValidation;
+using PFM.Application.Dto;
+using PFM.Domain.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PFM.Application.Validation
+{
+    public class CreateCardDtoValidator : AbstractValidator<CreateCardDto>
+    {
+        public CreateCardDtoValidator()
+        {
+            RuleFor(x => x.OwnerName)
+                .NotEmpty().WithMessage("owner-name:required:owner-name is required");
+
+            RuleFor(x => x.CardNumber)
+                .NotEmpty().WithMessage("card-number:required:card-number is required");
+
+            RuleFor(x => x.ExpirationDate)
+                .Must(d => d > DateOnly.Parse(DateTime.UtcNow.ToShortDateString().ToString()))
+                .WithMessage("expiration-date:invalid-value:expiration-date must be in the future");
+
+            RuleFor(x => x.AvailableAmount)
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("available-amount:negative:available-amount must be greater or equal to 0");
+
+            RuleFor(x => x.ReservedAmount)
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("reserved-amount:negative:reserved-amount must be greater or equal to 0");
+
+            RuleFor(x => x.UserId)
+                .NotEmpty().WithMessage("user-id:required:user-id is required");
+
+            RuleFor(x => x.CardType)
+                .Must(t => Enum.TryParse<CardTypeEnum>(t, true, out _))
+                .WithMessage(ctx =>
+                {
+                    var names = string.Join(", ", Enum.GetNames(typeof(CardTypeEnum)));
+                    return $"card-type:unknown-enum:card-type must be one of: {names}";
+                });
+        }
+    }
+}

@@ -31,6 +31,7 @@ namespace PFM.Infrastructure.Persistence.EntityTypeConfigurations
 
             builder.Property(c => c.ExpirationDate)
                 .HasColumnName("expiration_date")
+                .HasColumnType("date")
                 .IsRequired();
 
             builder.Property(c => c.AvailableAmount)

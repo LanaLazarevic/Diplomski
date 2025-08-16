@@ -11,5 +11,7 @@ namespace PFM.Domain.Interfaces
     {
         void Add(User user);
         Task<User?> GetByEmailAsync(string email, CancellationToken ct = default);
+
+        Task<User?> GetByIdAsync(Guid id, CancellationToken ct = default);
     }
 }

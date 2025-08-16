@@ -25,10 +25,12 @@ namespace PFM.Infrastructure.DependencyInjection
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICardRepository, CardRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IValidator<GetTransactionsQuery>, GetTransactionsQueryValidator>();
             services.AddScoped<IValidator<GetSpendingsAnalyticsQuery>, GetSpendingsAnalyticsQueryValidator>();
             services.AddScoped<IValidator<CreateUserDto>, CreateUserDtoValidator>();
+            services.AddScoped<IValidator<CreateCardDto>, CreateCardDtoValidator>();
             services.AddScoped<ITransactionImportLogger, FileTransactionImportLogger>();
             services.AddScoped<IAutoCategorizationService, AutoCategorizationService>();
             services.AddScoped<ITokenService, TokenService>();
