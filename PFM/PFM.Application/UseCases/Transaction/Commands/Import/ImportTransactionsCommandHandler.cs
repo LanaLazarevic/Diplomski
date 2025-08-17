@@ -75,6 +75,14 @@ namespace PFM.Application.UseCases.Transaction.Commands.Import
                         continue;
                     }
 
+                    var card = await _uow.Cards.GetByIdAsync(row.CardId, cancellationToken);
+
+                    if (card == null)
+                    {
+                        skippedIds.Add(row.Id);
+                        continue;
+                    }
+
                     var parsed = DateTime.ParseExact(row.Date.Trim(), "M/d/yyyy", CultureInfo.InvariantCulture);
                     var date = DateTime.SpecifyKind(parsed, DateTimeKind.Utc);
                     var amount = double.Parse(row.Amount.Replace("€", string.Empty).Trim(), NumberStyles.Any, CultureInfo.InvariantCulture);
@@ -95,7 +103,8 @@ namespace PFM.Application.UseCases.Transaction.Commands.Import
                         Description = row.Description,
                         Currency = currency,
                         Mcc = mcc,
-                        Kind = kind
+                        Kind = kind,
+                        CardId = card.Id
                     };
 
                     _uow.Transactions.Add(tx);

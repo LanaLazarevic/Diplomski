@@ -33,6 +33,10 @@ namespace PFM.Domain.Dtos
 
         [JsonPropertyName("splits")]
         public List<SplitItemDto>? Splits { get; set; }
+
+        [JsonPropertyName("card-id")]
+        public Guid CardId { get; set; }
+
     }
 
    

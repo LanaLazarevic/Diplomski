@@ -35,5 +35,8 @@ namespace PFM.Application.UseCases.Transaction.Commands.Import
 
         [Name("kind")]
         public string? Kind { get; set; }
+
+        [Name("card-id")]
+        public Guid CardId { get; set; }
     }
 }

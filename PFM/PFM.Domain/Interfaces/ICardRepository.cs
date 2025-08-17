@@ -10,5 +10,7 @@ namespace PFM.Domain.Interfaces
     public interface ICardRepository
     {
         void Add(Card card);
+
+        Task<Card?> GetByIdAsync(Guid id, CancellationToken ct = default);
     }
 }

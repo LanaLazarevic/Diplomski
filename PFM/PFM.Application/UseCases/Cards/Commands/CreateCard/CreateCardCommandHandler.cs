@@ -57,7 +57,7 @@ namespace PFM.Application.UseCases.Cards.Commands.CreateCard
                         Message = "User not found",
                         Details = $"User with id {dto.UserId} does not exist"
                     };
-                    return OperationResult.Fail(404, new[] { error });
+                    return OperationResult.Fail(440, new[] { error });
                 }
 
                 var cardType = Enum.Parse<CardTypeEnum>(dto.CardType, true);
