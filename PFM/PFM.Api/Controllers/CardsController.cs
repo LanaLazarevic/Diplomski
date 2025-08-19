@@ -1,8 +1,11 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PFM.Application.Dto;
 using PFM.Application.Result;
 using PFM.Application.UseCases.Cards.Commands.CreateCard;
+using PFM.Application.UseCases.Cards.Queries.GetAll;
+using PFM.Domain.Enums;
 
 namespace PFM.Api.Controllers
 {
@@ -18,6 +21,7 @@ namespace PFM.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = nameof(RoleEnum.admin))]
         public async Task<IActionResult> Create([FromBody] CreateCardDto request)
         {
             var cmd = new CreateCardCommand(request);
@@ -62,6 +66,23 @@ namespace PFM.Api.Controllers
             }
 
             return StatusCode(op.code, "Card successfully added");
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Get([FromQuery] GetCardsQuery request)
+        {
+            var op = await _mediator.Send(request);
+            if (!op.IsSuccess)
+            {
+                var errors = op.Error!
+                    .OfType<ServerError>()
+                    .Select(e => new { message = e.Message })
+                    .ToList();
+                return StatusCode(op.code, errors);
+            }
+
+            return StatusCode(op.code, op.Value);
         }
     }
 }

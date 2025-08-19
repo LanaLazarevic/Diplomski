@@ -1,4 +1,5 @@
-﻿using PFM.Domain.Entities;
+﻿using PFM.Domain.Dtos;
+using PFM.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,7 @@ namespace PFM.Domain.Interfaces
         void Add(Card card);
 
         Task<Card?> GetByIdAsync(Guid id, CancellationToken ct = default);
+
+        Task<PagedList<Card>> GetCardsAsync(CardQuerySpecification spec, CancellationToken ct = default);
     }
 }
