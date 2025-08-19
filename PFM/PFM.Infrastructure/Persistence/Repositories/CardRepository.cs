@@ -35,6 +35,12 @@ namespace PFM.Infrastructure.Persistence.Repositories
                 query = query.Where(c => c.OwnerName.ToLower().Contains(lowered));
             }
 
+            if (!string.IsNullOrWhiteSpace(spec.Email))
+            {
+                query = query.Where(c => c.User.Email == spec.Email);
+            }
+
+
             query = spec.SortBy.ToLower() switch
             {
                 "cardnumber" => spec.SortOrder == SortOrder.Asc

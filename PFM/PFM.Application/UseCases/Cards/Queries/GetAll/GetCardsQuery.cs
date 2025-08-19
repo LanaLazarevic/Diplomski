@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace PFM.Application.UseCases.Cards.Queries.GetAll
@@ -27,5 +28,9 @@ namespace PFM.Application.UseCases.Cards.Queries.GetAll
 
         [FromQuery(Name = "sort-order")]
         public string SortOrder { get; set; } = "Asc";
+
+        [JsonIgnore]
+        public string? Email { get; set; }
+
     }
 }

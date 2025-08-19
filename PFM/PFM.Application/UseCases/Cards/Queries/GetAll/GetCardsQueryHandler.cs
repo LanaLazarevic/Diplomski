@@ -28,7 +28,7 @@ namespace PFM.Application.UseCases.Cards.Queries.GetAll
             try
             {
                 var sortEnum = Enum.Parse<SortOrder>(request.SortOrder, true);
-                var spec = new CardQuerySpecification(request.OwnerName, request.Page, request.PageSize, request.SortBy, sortEnum);
+                var spec = new CardQuerySpecification(request.OwnerName, request.Page, request.PageSize, request.SortBy, sortEnum, request.Email);
                 var cards = await _uow.Cards.GetCardsAsync(spec, cancellationToken);
 
                 if (request.Page > cards.TotalPages && cards.TotalPages != 0)

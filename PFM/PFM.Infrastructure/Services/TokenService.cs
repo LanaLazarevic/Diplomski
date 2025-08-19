@@ -24,7 +24,7 @@ namespace PFM.Infrastructure.Services
         public string GenerateToken(User user)
         {
             var claims = new List<Claim>();
-            
+
             claims.Add(new Claim(ClaimTypes.Email, user.Email));
             claims.Add(new Claim(ClaimTypes.Role, user.Role.ToString()));
 

@@ -6,6 +6,7 @@ using PFM.Application.Result;
 using PFM.Application.UseCases.Cards.Commands.CreateCard;
 using PFM.Application.UseCases.Cards.Queries.GetAll;
 using PFM.Domain.Enums;
+using System.Security.Claims;
 
 namespace PFM.Api.Controllers
 {
@@ -72,6 +73,13 @@ namespace PFM.Api.Controllers
         [Authorize]
         public async Task<IActionResult> Get([FromQuery] GetCardsQuery request)
         {
+            if (!User.IsInRole(nameof(RoleEnum.admin)))
+            {
+                var userEmailClaim = User.FindFirst(ClaimTypes.Email)?.Value;
+                request.Email = userEmailClaim ?? string.Empty;
+            }
+
+
             var op = await _mediator.Send(request);
             if (!op.IsSuccess)
             {
