@@ -14,6 +14,7 @@ using PFM.Application.UseCases.Transaction.Queries.GetAllTransactions;
 using PFM.Domain.Dtos;
 using PFM.Domain.Enums;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace PFM.Api.Controllers
@@ -114,7 +115,14 @@ namespace PFM.Api.Controllers
 
             if (errors.Any() || queryModel == null)
                 return BadRequest(new { errors });
-
+            if (!User.IsInRole(nameof(RoleEnum.admin)))
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (Guid.TryParse(userIdClaim, out var userId))
+                {
+                    queryModel.UserId = userId;
+                }
+            }
 
             var op = await _mediator.Send(queryModel);
 

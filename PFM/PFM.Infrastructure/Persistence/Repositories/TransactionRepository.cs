@@ -31,14 +31,16 @@ namespace PFM.Infrastructure.Persistence.Repositories
             var query = _ctx.Transactions.Include(t => t.Splits).Include(t => t.Card).AsQueryable();
 
             if (spec.StartDate.HasValue)
-                query = query.Where(t => t.Date >= spec.StartDate.Value);
+                query = query.Where(t => t.Date >= spec.StartDate);
 
             if (spec.EndDate.HasValue)
-                query = query.Where(t => t.Date <= spec.EndDate.Value);
+                query = query.Where(t => t.Date <= spec.EndDate);
 
             if (spec.Kind != null && spec.Kind.Any())
                 query = query.Where(t => spec.Kind.Contains(t.Kind));
 
+            if (spec.UserId.HasValue)
+                query = query.Where(t => t.Card.UserId == spec.UserId);
 
             query = spec.SortBy.ToLower() switch
             {
@@ -135,13 +137,13 @@ namespace PFM.Infrastructure.Persistence.Repositories
                         .AsQueryable();
 
             if (spec.StartDate.HasValue)
-                q = q.Where(t => t.Date >= spec.StartDate.Value.Date);
+                q = q.Where(t => t.Date >= spec.StartDate);
 
             if (spec.EndDate.HasValue)
-                q = q.Where(t => t.Date <= spec.EndDate.Value.Date);
+                q = q.Where(t => t.Date <= spec.EndDate);
 
             if (spec.Direction.HasValue)
-                q = q.Where(t => t.Direction == spec.Direction.Value);
+                q = q.Where(t => t.Direction == spec.Direction);
 
             return await q.ToListAsync(ct);
         }

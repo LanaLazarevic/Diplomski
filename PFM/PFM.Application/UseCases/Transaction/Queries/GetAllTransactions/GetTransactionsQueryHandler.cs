@@ -66,7 +66,8 @@ namespace PFM.Application.UseCases.Transaction.Queries.GetAllTransactions
                 request.Page,
                 request.PageSize,
                 request.SortBy,
-                sortEnum
+                sortEnum,
+                request.UserId
             );
 
             try

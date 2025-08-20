@@ -22,6 +22,7 @@ namespace PFM.Domain.Dtos
         public int PageSize { get; }
         public string SortBy { get; }
         public SortOrder SortOrder { get; }
+        public Guid? UserId { get; set; }
 
         public TransactionQuerySpecification(
             DateTime? startDate,
@@ -30,7 +31,8 @@ namespace PFM.Domain.Dtos
             int page,
             int pageSize,
             string sortBy,
-            SortOrder sortOrder)
+            SortOrder sortOrder,
+            Guid? userId)
         {
             StartDate = startDate;
             EndDate = endDate;
@@ -39,6 +41,7 @@ namespace PFM.Domain.Dtos
             PageSize = pageSize <= 0 ? 10 : pageSize;
             SortBy = !string.IsNullOrWhiteSpace(sortBy) ? sortBy : "date";
             SortOrder = sortOrder;
+            UserId = userId;
         }
     }
 }

@@ -75,10 +75,12 @@ namespace PFM.Api.Controllers
         {
             if (!User.IsInRole(nameof(RoleEnum.admin)))
             {
-                var userEmailClaim = User.FindFirst(ClaimTypes.Email)?.Value;
-                request.Email = userEmailClaim ?? string.Empty;
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (Guid.TryParse(userIdClaim, out var userId))
+                {
+                    request.UserId = userId;
+                }
             }
-
 
             var op = await _mediator.Send(request);
             if (!op.IsSuccess)

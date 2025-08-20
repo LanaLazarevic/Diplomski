@@ -30,7 +30,7 @@ namespace PFM.Application.UseCases.Cards.Queries.GetAll
         public string SortOrder { get; set; } = "Asc";
 
         [JsonIgnore]
-        public string? Email { get; set; }
+        public Guid? UserId { get; set; }
 
     }
 }

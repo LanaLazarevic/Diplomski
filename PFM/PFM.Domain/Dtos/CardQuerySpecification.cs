@@ -13,17 +13,17 @@ namespace PFM.Domain.Dtos
         public int PageSize { get; }
         public string SortBy { get; }
         public SortOrder SortOrder { get; }
-        public string? Email { get; }
+        public Guid? UserId { get; }
 
 
-        public CardQuerySpecification(string? ownerName, int page, int pageSize, string sortBy, SortOrder sortOrder, string? email)
+        public CardQuerySpecification(string? ownerName, int page, int pageSize, string sortBy, SortOrder sortOrder, Guid? userId)
         {
             OwnerName = ownerName;
             Page = page <= 0 ? 1 : page;
             PageSize = pageSize <= 0 ? 10 : pageSize;
             SortBy = !string.IsNullOrWhiteSpace(sortBy) ? sortBy : "ownername";
             SortOrder = sortOrder;
-            Email = email;
+            UserId = userId;
         }
     }
 }
