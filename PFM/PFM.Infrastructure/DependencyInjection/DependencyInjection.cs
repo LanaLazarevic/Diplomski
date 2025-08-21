@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PFM.Application.Dto;
 using PFM.Application.Interfaces;
@@ -9,6 +10,8 @@ using PFM.Domain.Interfaces;
 using PFM.Infrastructure.Persistence;
 using PFM.Infrastructure.Persistence.Repositories;
 using PFM.Infrastructure.Services;
+using PFM.Infrastructure.Settings;
+using SixLabors.ImageSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +22,12 @@ namespace PFM.Infrastructure.DependencyInjection
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
+        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-           
+
+            services.Configure<EmailSettings>(configuration.GetSection("Email"));
+
+
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
@@ -34,6 +40,9 @@ namespace PFM.Infrastructure.DependencyInjection
             services.AddScoped<ITransactionImportLogger, FileTransactionImportLogger>();
             services.AddScoped<IAutoCategorizationService, AutoCategorizationService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddSingleton<MonthlyReportService>();
+            services.AddHostedService(sp => sp.GetRequiredService<MonthlyReportService>());
             return services;
         }
 

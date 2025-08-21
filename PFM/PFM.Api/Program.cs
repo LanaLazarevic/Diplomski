@@ -12,7 +12,7 @@ using SixLabors.ImageSharp;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PFMDbContext>();
-builder.Services.AddInfrastructureServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddJwtAuth(builder.Configuration);
 builder.Services.AddAutoMapper(cfg =>
 {

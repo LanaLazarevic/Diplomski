@@ -18,5 +18,7 @@ namespace PFM.Domain.Interfaces
         Task<PagedList<User>> GetUsersAsync(UserQuerySpecification spec, CancellationToken ct = default);
 
         void Update(User user);
+
+        Task<List<User>> GetAllWithCardsAndTransactionsAsync(DateTime start, DateTime end, CancellationToken ct = default);
     }
 }

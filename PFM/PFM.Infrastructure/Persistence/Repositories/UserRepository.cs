@@ -83,6 +83,14 @@ namespace PFM.Infrastructure.Persistence.Repositories
             };
         }
 
+        public async Task<List<User>> GetAllWithCardsAndTransactionsAsync(DateTime start, DateTime end, CancellationToken ct = default)
+        {
+            return await _ctx.Users
+                .Include(u => u.Cards!)
+                    .ThenInclude(c => c.Transactions!.Where(t => t.Date >= start && t.Date <= end))
+                .ToListAsync(ct);
+        }
+
         public void Update(User user)
         {
             _ctx.Users.Update(user);
