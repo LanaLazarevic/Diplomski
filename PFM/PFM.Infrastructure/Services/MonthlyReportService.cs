@@ -26,7 +26,7 @@ namespace PFM.Infrastructure.Services
         {
             _logger = logger;
             _scopeFactory = scopeFactory;
-            _cron = CronExpression.Parse("0 */2 * * * *", CronFormat.IncludeSeconds);
+            _cron = CronExpression.Parse("0 0 0 1 * *", CronFormat.IncludeSeconds);
         }
 
 
