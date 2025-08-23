@@ -9,5 +9,5 @@ using System.Threading.Tasks;
 
 namespace PFM.Application.UseCases.Users.Commands.UpdateUser
 {
-    public record UpdateUserCommand(Guid Id, CreateUserDto Dto) : IRequest<OperationResult>;
+    public record UpdateUserCommand(Guid Id, UpdateUserDto Dto) : IRequest<OperationResult>;
 }

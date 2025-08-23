@@ -37,6 +37,7 @@ namespace PFM.Infrastructure.DependencyInjection
             services.AddScoped<IValidator<GetSpendingsAnalyticsQuery>, GetSpendingsAnalyticsQueryValidator>();
             services.AddScoped<IValidator<CreateUserDto>, CreateUserDtoValidator>();
             services.AddScoped<IValidator<CreateCardDto>, CreateCardDtoValidator>();
+            services.AddScoped<IValidator<UpdateUserDto>, UpdateUserDtoValidator>();
             services.AddScoped<ITransactionImportLogger, FileTransactionImportLogger>();
             services.AddScoped<IAutoCategorizationService, AutoCategorizationService>();
             services.AddScoped<ITokenService, TokenService>();

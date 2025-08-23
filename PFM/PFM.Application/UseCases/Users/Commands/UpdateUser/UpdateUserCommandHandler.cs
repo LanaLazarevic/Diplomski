@@ -15,9 +15,9 @@ namespace PFM.Application.UseCases.Users.Commands.UpdateUser
     public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, OperationResult>
     {
         private readonly IUnitOfWork _uow;
-        private readonly IValidator<CreateUserDto> _validator;
+        private readonly IValidator<UpdateUserDto> _validator;
 
-        public UpdateUserCommandHandler(IUnitOfWork uow, IValidator<CreateUserDto> validator)
+        public UpdateUserCommandHandler(IUnitOfWork uow, IValidator<UpdateUserDto> validator)
         {
             _uow = uow;
             _validator = validator;
@@ -60,17 +60,13 @@ namespace PFM.Application.UseCases.Users.Commands.UpdateUser
                     return OperationResult.Fail(440, new[] { error });
                 }
 
-                var role = Enum.Parse<RoleEnum>(dto.Role, true);
-
                 user.FirstName = dto.FirstName;
                 user.LastName = dto.LastName;
                 user.Email = dto.Email;
                 user.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
                 user.Address = dto.Address;
                 user.PhoneNumber = dto.PhoneNumber;
-                user.Birthday = dto.Birthday;
-                user.Jmbg = dto.Jmbg;
-                user.Role = role;
+               
 
                 _uow.Users.Update(user);
                 await _uow.SaveChangesAsync(cancellationToken);

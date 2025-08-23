@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PFM.Application.Result;
+using PFM.Application.Dtos;
 
 namespace PFM.Application.UseCases.Transaction.Queries.GetAllTransactions
 {

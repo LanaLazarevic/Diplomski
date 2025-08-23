@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace PFM.Domain.Dtos
+namespace PFM.Application.Dtos
 {
     public class TransactionDto
     {

@@ -108,7 +108,7 @@ namespace PFM.Api.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = nameof(RoleEnum.admin))]
-        public async Task<IActionResult> Update(Guid id, [FromBody] CreateUserDto request)
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserDto request)
         {
             var cmd = new UpdateUserCommand(id, request);
             var op = await _mediator.Send(cmd);

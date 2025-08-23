@@ -14,8 +14,6 @@ namespace PFM.Application.Validation
     {
         public GetTransactionsQueryValidator()
         {
-            ClassLevelCascadeMode = CascadeMode.Continue;
-            RuleLevelCascadeMode = CascadeMode.Continue;
 
 
             RuleFor(x => x.Kind)

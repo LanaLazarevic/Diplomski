@@ -1,4 +1,4 @@
-﻿using PFM.Domain.Dtos;
+﻿using PFM.Application.Dtos;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 

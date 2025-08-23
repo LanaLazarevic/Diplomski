@@ -95,6 +95,7 @@ namespace PFM.Infrastructure.Persistence.Repositories
                 .Skip((spec.Page - 1) * spec.PageSize)
                 .Take(spec.PageSize)
                 .ToListAsync();
+           
 
             return new PagedList<Transaction>()
             {

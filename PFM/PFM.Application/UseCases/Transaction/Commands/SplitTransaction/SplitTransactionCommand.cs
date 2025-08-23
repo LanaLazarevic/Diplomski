@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using PFM.Application.Result;
-using PFM.Domain.Dtos;
+using PFM.Application.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;

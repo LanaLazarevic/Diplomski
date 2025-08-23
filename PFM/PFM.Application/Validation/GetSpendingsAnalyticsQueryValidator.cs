@@ -16,8 +16,6 @@ namespace PFM.Application.Validation
     {
         public GetSpendingsAnalyticsQueryValidator()
         {
-            ClassLevelCascadeMode = CascadeMode.Continue;
-            RuleLevelCascadeMode = CascadeMode.Continue;
 
 
             RuleFor(x => x.EndDate)

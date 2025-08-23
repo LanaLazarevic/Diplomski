@@ -44,7 +44,6 @@ namespace PFM.Infrastructure.Services
 
         private void ScheduleNext()
         {
-            Console.WriteLine("Scheduling next monthly report job");
             var next = _cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Utc);
             if (next == null)
             {
@@ -62,7 +61,6 @@ namespace PFM.Infrastructure.Services
         {
             try
             {
-                Console.WriteLine("Running monthly report job");
                 await SendReportsAsync(CancellationToken.None);
             }
             catch (Exception ex)
@@ -83,7 +81,6 @@ namespace PFM.Infrastructure.Services
 
         public async Task SendReportsAsync(CancellationToken ct)
         {
-            Console.WriteLine("Generating monthly transaction reports");
             _logger.LogInformation("Generating monthly transaction reports");
             var start = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1, 0, 0, 0, DateTimeKind.Utc);
             var end = start.AddMonths(1).AddTicks(-1);

@@ -1,5 +1,5 @@
 ﻿using PFM.Application.Result;
-using PFM.Domain.Dtos;
+using PFM.Application.Dtos;
 
 namespace PFM.Api.Validation
 {
