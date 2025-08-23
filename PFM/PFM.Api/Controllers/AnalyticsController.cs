@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PFM.Api.Validation;
 using PFM.Application.Result;
 using PFM.Application.UseCases.Analytics.Queries.GetSpendingAnalytics;
 using Swashbuckle.AspNetCore.Annotations;

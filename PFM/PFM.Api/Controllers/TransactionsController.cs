@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using NPOI.SS.UserModel;
 using Org.BouncyCastle.Ocsp;
 using PFM.Api.Request;
-using PFM.Api.Validation;
 using PFM.Application.Result;
 using PFM.Application.UseCases.Analytics.Queries.GetSpendingAnalytics;
 using PFM.Application.UseCases.Transaction.Commands.AutoCategorization;
@@ -268,44 +267,30 @@ namespace PFM.Api.Controllers
         Summary = "Split transaction by id",
         Description = "Splits transaction by id of the transaction")]
         [Authorize]
-        public async Task<ActionResult> Split([FromRoute] string id)
+        public async Task<ActionResult> Split([FromRoute] string id, [FromBody] SplitTransactionRequest request)
         {
-            using var reader = new StreamReader(Request.Body);
-            var rawBody = await reader.ReadToEndAsync();
 
-            SplitTransactionRequest? request;
-            try
+            if (!ModelState.IsValid)
             {
-                request = JsonSerializer.Deserialize<SplitTransactionRequest>(rawBody, new JsonSerializerOptions { });
+                var errors = ModelState
+                        .SelectMany(kvp => kvp.Value?.Errors
+                        .Select(err =>
+                        {
+                            var raw = err.ErrorMessage ?? "";
+                            var idx = raw.IndexOf(':');
+                            var code = idx > 0 ? raw[..idx] : "invalid-format";
+                            var message = idx > 0 ? raw[(idx + 1)..] : raw;
+                            return new ValidationError
+                            {
+                                Tag = kvp.Key,
+                                Error = code,
+                                Message = message
+                            };
+                        }) ?? [])
+                        .ToList();
 
-                if (request == null)
-                {
-                    List<ValidationError> errors = new List<ValidationError>();
-                    errors.Add(new ValidationError
-                    {
-                        Tag = "body",
-                        Error = "invalid-format",
-                        Message = "Request body is empty or malformed."
-                    });
-                    return BadRequest(new { errors});
-                }
-            }
-            catch (JsonException)
-            {
-                List<ValidationError> errors = new List<ValidationError>();
-                errors.Add(new ValidationError
-                {
-                    Tag = "body",
-                    Error = "invalid-format",
-                    Message = "Could not parse request body."
-                });
                 return BadRequest(new { errors });
             }
-
-            var validationErrors = SplitTransactionValidatorHelper.Validate(request.Splits?.ToList());
-
-            if (validationErrors.Any() || request.Splits == null)
-                return BadRequest(new { errors = validationErrors });
 
             var cmd = new SplitTransactionCommand(id, request.Splits);
             var op = await _mediator.Send(cmd);
@@ -335,6 +320,18 @@ namespace PFM.Api.Controllers
                    })
                    .First();
                    
+                } else
+                {
+                    errors = op.Error!
+                    .OfType<ValidationError>()
+                    .Select(e => new
+                    {
+                        tag = e.Tag,
+                        error = e.Error,
+                        message = e.Message
+                    })
+                    .ToList();
+                    return StatusCode(op.code, new { errors });
                 }
 
 

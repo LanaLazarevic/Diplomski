@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using PFM.Application.Result;
 using PFM.Domain.Dtos;
 using PFM.Domain.Entities;
@@ -14,14 +15,38 @@ namespace PFM.Application.UseCases.Transaction.Commands.SplitTransaction
     public class SplitTransactionCommandHandler : IRequestHandler<SplitTransactionCommand, OperationResult>
     {
         private readonly IUnitOfWork _uow;
-        
-        public SplitTransactionCommandHandler(IUnitOfWork ouw)
+        private readonly IValidator<SplitTransactionCommand> _validator;
+
+        public SplitTransactionCommandHandler(IUnitOfWork ouw, IValidator<SplitTransactionCommand> validator)
         {
             _uow = ouw;
+            _validator = validator;
         }
 
         public async Task<OperationResult> Handle(SplitTransactionCommand request, CancellationToken cancellationToken)
         {
+
+            var validation = await _validator.ValidateAsync(request, cancellationToken);
+            if (!validation.IsValid)
+            {
+                var errors = validation.Errors.Select(e =>
+                {
+                    var raw = e.ErrorMessage ?? string.Empty;
+                    var parts = raw.Split(':', 3);
+                    var tag = parts.ElementAtOrDefault(0) ?? e.PropertyName;
+                    var code = parts.ElementAtOrDefault(1) ?? e.ErrorCode;
+                    var message = parts.ElementAtOrDefault(2) ?? raw;
+                    return new ValidationError
+                    {
+                        Tag = tag,
+                        Error = code,
+                        Message = message
+                    };
+                }).ToList();
+                return OperationResult.Fail(400, errors);
+            }
+
+
             var tx = await _uow.Transactions.GetForAnalyticsAsync(
                          new AnalyticsTransactionQuerySpecification(
                              null, null, null), cancellationToken)

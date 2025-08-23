@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PFM.Application.Dto;
 using PFM.Application.Interfaces;
 using PFM.Application.UseCases.Analytics.Queries.GetSpendingAnalytics;
+using PFM.Application.UseCases.Transaction.Commands.SplitTransaction;
 using PFM.Application.UseCases.Transaction.Queries.GetAllTransactions;
 using PFM.Application.Validation;
 using PFM.Domain.Interfaces;
@@ -35,6 +36,7 @@ namespace PFM.Infrastructure.DependencyInjection
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IValidator<GetTransactionsQuery>, GetTransactionsQueryValidator>();
             services.AddScoped<IValidator<GetSpendingsAnalyticsQuery>, GetSpendingsAnalyticsQueryValidator>();
+            services.AddScoped<IValidator<SplitTransactionCommand>, SplitTransactionCommandValidator>();
             services.AddScoped<IValidator<CreateUserDto>, CreateUserDtoValidator>();
             services.AddScoped<IValidator<CreateCardDto>, CreateCardDtoValidator>();
             services.AddScoped<IValidator<UpdateUserDto>, UpdateUserDtoValidator>();
