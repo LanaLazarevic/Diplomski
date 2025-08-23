@@ -22,15 +22,37 @@ namespace PFM.Application.UseCases.Transaction.Queries.GetAllTransactions
 
         private readonly IMapper _mapper;
 
-        public GetCategoriesQueryHandler(IUnitOfWork repository, IMapper mapper)
+        private readonly IValidator<GetTransactionsQuery> _validator;
+
+        public GetCategoriesQueryHandler(IUnitOfWork repository, IMapper mapper, IValidator<GetTransactionsQuery> validator)
         {
             _repository = repository;
             _mapper = mapper;
+            _validator = validator;
         }
 
         public async Task<OperationResult<PagedList<TransactionDto>>> Handle(GetTransactionsQuery request, CancellationToken cancellationToken)
         {
-            
+            var validation = await _validator.ValidateAsync(request, cancellationToken);
+            if (!validation.IsValid)
+            {
+                var errors = validation.Errors.Select(e =>
+                {
+                    var raw = e.ErrorMessage ?? string.Empty;
+                    var parts = raw.Split(':', 3);
+                    var tag = parts.ElementAtOrDefault(0) ?? e.PropertyName;
+                    var code = parts.ElementAtOrDefault(1) ?? e.ErrorCode;
+                    var message = parts.ElementAtOrDefault(2) ?? raw;
+                    return new ValidationError
+                    {
+                        Tag = tag,
+                        Error = code,
+                        Message = message
+                    };
+                }).ToList();
+                return OperationResult<PagedList<TransactionDto>>.Fail(400, errors);
+            }
+
             List<TransactionKind>? kindsEnum = null;
             if (request.Kind != null && request.Kind.Any())
             {

@@ -15,7 +15,6 @@ namespace PFM.Application.Validation
         public GetTransactionsQueryValidator()
         {
 
-
             RuleFor(x => x.Kind)
              .Must(list => list == null || list.All(k => Enum.TryParse<TransactionKind>(k.Trim(), true, out _)))
              .WithMessage(ctx => {

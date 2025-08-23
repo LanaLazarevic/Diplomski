@@ -6,6 +6,7 @@ using Org.BouncyCastle.Ocsp;
 using PFM.Api.Request;
 using PFM.Api.Validation;
 using PFM.Application.Result;
+using PFM.Application.UseCases.Analytics.Queries.GetSpendingAnalytics;
 using PFM.Application.UseCases.Transaction.Commands.AutoCategorization;
 using PFM.Application.UseCases.Transaction.Commands.CategorizeTransaction;
 using PFM.Application.UseCases.Transaction.Commands.Import;
@@ -109,41 +110,63 @@ namespace PFM.Api.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Get()
-        { 
-            var (queryModel, errors) = GetAllTransactionQueryValidationHelper.ParseAndValidate(Request.Query);
+        public async Task<IActionResult> Get([FromQuery] GetTransactionsQuery request)
+        {
+            if (!ModelState.IsValid)
+            {
+                var modelErrors = ModelState
+                   .SelectMany(kvp => kvp.Value?.Errors
+                   .Select(err =>
+                   {
+                       var raw = err.ErrorMessage ?? "";
+                       var idx = raw.IndexOf(':');
+                       var code = idx > 0 ? raw.Substring(0, idx) : "invalid-format";
+                       var message = idx > 0 ? raw.Substring(idx + 1) : raw;
+                       var tag = kvp.Key;
+                       if (string.IsNullOrEmpty(tag))
+                           tag = "query";
+                       return new ValidationError
+                       {
+                           Tag = tag,
+                           Error = code,
+                           Message = message
+                       };
+                   }) ?? [])
+                   .ToList();
 
-            if (errors.Any() || queryModel == null)
-                return BadRequest(new { errors });
+                return BadRequest(new { errors = modelErrors });
+            }
+
+
             if (!User.IsInRole(nameof(RoleEnum.admin)))
             {
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (Guid.TryParse(userIdClaim, out var userId))
                 {
-                    queryModel.UserId = userId;
+                    request.UserId = userId;
                 }
             }
 
-            var op = await _mediator.Send(queryModel);
+            var op = await _mediator.Send(request);
 
             if (!op.IsSuccess)
             {
-                object? error = null;
+                object? errors = null;
 
                 if (op.code == 503)
                 {
-                    error = op.Error!
+                    errors = op.Error!
                     .OfType<ServerError>()
                     .Select(e => new
                     {
                         message = e.Message
                     })
                     .ToList();
-                    return StatusCode(op.code, error);
+                    return StatusCode(op.code, errors);
                 }
                 else
                 {
-                    error = op.Error!
+                    errors = op.Error!
                    .OfType<ValidationError>()
                    .Select(e => new
                    {
@@ -155,8 +178,6 @@ namespace PFM.Api.Controllers
                     return StatusCode(op.code, new { errors });
                 }
             }
-                
-
             return Ok(op.Value);
         }
 

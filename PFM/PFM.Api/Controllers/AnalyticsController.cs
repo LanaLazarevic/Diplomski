@@ -25,20 +25,39 @@ namespace PFM.Api.Controllers
             Description = "Retrieves spending analytics by category or by subcategories within category"
         )]
         [Authorize]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] GetSpendingsAnalyticsQuery request)
         {
-            var (queryModel, errors) = AnalyticsQueryValidationHelper.ParseAndValidate(Request.Query);
+            if (!ModelState.IsValid)
+            {
+                var modelErrors = ModelState
+                    .SelectMany(kvp => kvp.Value?.Errors
+                    .Select(err =>
+                    {
+                        var raw = err.ErrorMessage ?? "";
+                        var idx = raw.IndexOf(':');
+                        var code = idx > 0 ? raw.Substring(0, idx) : "invalid-format";
+                        var message = idx > 0 ? raw.Substring(idx + 1) : raw;
+                        var tag = kvp.Key;
+                        if (string.IsNullOrEmpty(tag))
+                            tag = "query";
+                        return new ValidationError
+                        {
+                            Tag = tag,
+                            Error = code,
+                            Message = message
+                        };
+                    }) ?? [])
+                    .ToList();
+                return BadRequest(new { errors = modelErrors });
+            }
 
-            if (errors.Any() || queryModel == null)
-                return BadRequest(new { errors });
-
-            var op = await _mediator.Send(queryModel);
+            var op = await _mediator.Send(request);
             if (!op.IsSuccess)
             {
-                object? error = null;
+                object? errors = null;
                 if (op.code == 503)
                 {
-                    error = op.Error!
+                    errors = op.Error!
                     .OfType<ServerError>()
                     .Select(e => new
                     {
@@ -47,7 +66,7 @@ namespace PFM.Api.Controllers
                     .ToList();
                 } else if (op.code == 440)
                 {
-                    error = op.Error!
+                    errors = op.Error!
                     .OfType<BusinessError>()
                     .Select(e => new
                     {
@@ -56,10 +75,21 @@ namespace PFM.Api.Controllers
                         details = e.Details
                     })
                     .First();
+                } else
+                {
+                    errors = op.Error!
+                    .OfType<ValidationError>()
+                    .Select(e => new
+                    {
+                        tag = e.Tag,
+                        error = e.Error,
+                        message = e.Message
+                    })
+                    .ToList();
+                    return StatusCode(op.code, new { errors });
                 }
 
-
-                 return StatusCode(op.code, error);
+                return StatusCode(op.code, errors);
 
             }
 

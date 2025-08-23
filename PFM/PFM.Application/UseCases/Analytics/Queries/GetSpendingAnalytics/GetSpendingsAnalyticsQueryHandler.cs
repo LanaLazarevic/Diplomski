@@ -10,16 +10,40 @@ namespace PFM.Application.UseCases.Analytics.Queries.GetSpendingAnalytics
     public class GetSpendingsAnalyticsQueryHandler : IRequestHandler<GetSpendingsAnalyticsQuery, OperationResult<SpendingsGroupDto>>
     {
         private readonly IUnitOfWork _uow;
+        private readonly IValidator<GetSpendingsAnalyticsQuery> _validator;
 
-        public GetSpendingsAnalyticsQueryHandler(IUnitOfWork uow)
+
+        public GetSpendingsAnalyticsQueryHandler(IUnitOfWork uow, IValidator<GetSpendingsAnalyticsQuery> validator)
         {
             _uow = uow;
+            _validator = validator;
         }
 
         public async Task<OperationResult<SpendingsGroupDto>> Handle(GetSpendingsAnalyticsQuery request, CancellationToken cancellationToken)
         {
 
-            if(!string.IsNullOrWhiteSpace(request.CatCode))
+            var validation = await _validator.ValidateAsync(request, cancellationToken);
+            if (!validation.IsValid)
+            {
+                var errors = validation.Errors.Select(e =>
+                {
+                    var raw = e.ErrorMessage ?? string.Empty;
+                    var parts = raw.Split(':', 3);
+                    var tag = parts.ElementAtOrDefault(0) ?? e.PropertyName;
+                    var code = parts.ElementAtOrDefault(1) ?? e.ErrorCode;
+                    var message = parts.ElementAtOrDefault(2) ?? raw;
+                    return new ValidationError
+                    {
+                        Tag = tag,
+                        Error = code,
+                        Message = message
+                    };
+                }).ToList();
+                return OperationResult<SpendingsGroupDto>.Fail(400, errors);
+            }
+
+
+            if (!string.IsNullOrWhiteSpace(request.CatCode))
             {
                 var cats = await _uow.Categories.GetByCodesAsync(new[] { request.CatCode }, cancellationToken);
                 var cat = cats.SingleOrDefault();
