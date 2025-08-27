@@ -7,7 +7,7 @@ import {CategoriesResponse, CategoryDto} from '../model/model';
   providedIn: 'root'
 })
 export class CategoryService {
-  private apiUrl = 'http://localhost:3031/categories';
+  private apiUrl = 'http://localhost:5156/categories';
   private allCategories$!: Observable<CategoryDto[]>;
   private categoriesMap$!: Observable<Map<string, CategoryDto[]>>;
 

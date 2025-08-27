@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
 import {PagedList, PagedListRaw, TransactionDto, TransactionDtoRaw} from '../model/model';
 import {data} from 'autoprefixer';
@@ -8,7 +8,7 @@ import {data} from 'autoprefixer';
   providedIn: 'root'
 })
 export class TransactionService {
-  private apiUrl = 'http://localhost:3031/transactions';
+  private apiUrl = 'http://localhost:5156/transactions';
   constructor(private http: HttpClient) {}
 
 
@@ -29,7 +29,7 @@ export class TransactionService {
       }
     }
     return this.http
-      .get<PagedListRaw<TransactionDtoRaw>>(this.apiUrl, { params: queryParams })
+      .get<PagedListRaw<TransactionDtoRaw>>(this.apiUrl, { params: queryParams, headers: this.getHeaders() }, )
       .pipe(
         map(raw => ({
           items: raw.items.map(r => ({
@@ -64,6 +64,11 @@ export class TransactionService {
       body,
       { responseType: 'text' }
     );
+  }
+
+  private getHeaders() {
+    const jwt = sessionStorage.getItem('jwt');
+    return  new HttpHeaders().set('Authorization', `Bearer ${jwt}`);
   }
 }
 

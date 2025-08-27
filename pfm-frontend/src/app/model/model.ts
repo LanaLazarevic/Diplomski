@@ -73,3 +73,13 @@ export interface CategoryDto {
 export interface CategoriesResponse {
   items: CategoryDto[];
 }
+
+export interface LoginResponse {
+  jwt: string;
+}
+
+export interface BusinessError {
+  problem: string;
+  message: string;
+  details: string;
+}

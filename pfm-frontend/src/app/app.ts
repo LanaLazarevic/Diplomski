@@ -4,10 +4,10 @@ import {TransactionList} from './components/trancastion-list/transaction-list.co
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, TransactionList],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('pfm-frontend');
+  protected readonly title = signal('Personal Finance Manager');
 }

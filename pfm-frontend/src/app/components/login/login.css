@@ -1,0 +1,30 @@
+:is(.bg-white, .bg-gray-100, .bg-slate-50, .bg-slate-100) {
+  background-color: hsl(var(--card)) !important;
+}
+
+.min-h-screen {
+  background-color: hsl(var(--background)) !important;
+}
+
+.text-gray-800, .text-slate-800 {
+  color: white !important;
+}
+
+.text-gray-600, .text-slate-400 {
+  color: lavender !important;
+}
+
+input {
+  color: white;
+  border: 1px solid hsl(215, 27.9%, 16.9%);
+}
+
+button {
+  background-color: #636063;
+  color: white;
+  border: 1px solid hsl(215, 27.9%, 16.9%);
+}
+
+button:hover {
+  background-color: hsl(263, 70%, 30%);
+}
