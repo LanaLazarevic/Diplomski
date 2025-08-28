@@ -28,6 +28,7 @@ namespace PFM.Infrastructure.Services
             claims.Add(new Claim(ClaimTypes.Email, user.Email));
             claims.Add(new Claim(ClaimTypes.Role, user.Role.ToString()));
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+            claims.Add(new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"));
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
