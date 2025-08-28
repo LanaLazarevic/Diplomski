@@ -25,10 +25,36 @@ export class LoginService {
   setToken(jwt: string): void {
     sessionStorage.setItem('jwt', jwt);
     const decoded: any = jwtDecode(jwt);
-    this.setUserRole(decoded.role);
-    if (decoded.email) {
-      sessionStorage.setItem('email', decoded.email);
+    const role =
+      decoded.role ||
+      decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+    const email =
+      decoded.email ||
+      decoded[
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'
+        ];
+    const userId =
+      decoded.sub ||
+      decoded[
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
+        ];
+    const fullName =
+      decoded.name ||
+      decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
+
+    if (role) {
+      this.setUserRole(role);
     }
+    if (email) {
+      sessionStorage.setItem('email', email);
+    }
+    if (userId) {
+      sessionStorage.setItem('userId', userId);
+    }
+    if (fullName) {
+      sessionStorage.setItem('fullName', fullName);
+    }
+
   }
 
   setUserRole(role: string): void {
@@ -47,5 +73,31 @@ export class LoginService {
 
   isAdmin(): boolean {
     return sessionStorage.getItem('isAdmin') === 'true';
+  }
+
+  getUserName(): string | null {
+    return sessionStorage.getItem('fullName');
+  }
+
+  getUserInitials(): string {
+    const name = this.getUserName();
+    if (!name) {
+      return '';
+    }
+    return name
+      .split(' ')
+      .map(part => part.charAt(0))
+      .join('')
+      .toUpperCase();
+  }
+
+  clearAuthData(): void {
+    sessionStorage.removeItem('jwt');
+    sessionStorage.removeItem('role');
+    sessionStorage.removeItem('isAdmin');
+    sessionStorage.removeItem('email');
+    sessionStorage.removeItem('userId');
+    sessionStorage.removeItem('fullName');
+    this.roleSubject.next(null);
   }
 }

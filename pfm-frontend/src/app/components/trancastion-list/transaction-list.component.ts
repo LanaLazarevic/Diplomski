@@ -4,12 +4,14 @@ import {TransactionService} from '../../service/transaction-service';
 import {NgClass} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {CategoryService} from '../../service/category-service';
+import {Sidebar} from '../sidebar/sidebar';
 
 @Component({
   selector: 'app-transaction-list',
   imports: [
     NgClass,
-    FormsModule
+    FormsModule,
+    Sidebar
   ],
   templateUrl: './transaction-list.component.html',
   styleUrl: './transaction-list.component.css'
