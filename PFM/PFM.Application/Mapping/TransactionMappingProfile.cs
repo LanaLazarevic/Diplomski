@@ -15,7 +15,8 @@ namespace PFM.Application.Mapping
     {
         public TransactionMappingProfile()
         {
-            CreateMap<Transaction, TransactionDto>();
+            CreateMap<Transaction, TransactionDto>()
+                .ForMember(dest => dest.CardNumber, opt => opt.MapFrom(src => src.Card.CardNumber));
             CreateMap<Split, SplitItemDto>();
             CreateMap<Category, CategoryDto>();
             CreateMap<Card, CardDto>()

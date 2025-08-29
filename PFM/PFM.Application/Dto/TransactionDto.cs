@@ -37,6 +37,9 @@ namespace PFM.Application.Dtos
         [JsonPropertyName("card-id")]
         public Guid CardId { get; set; }
 
+        [JsonPropertyName("card-number")]
+        public string CardNumber { get; set; }
+
     }
 
    
