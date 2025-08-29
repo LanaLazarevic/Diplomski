@@ -30,6 +30,7 @@ export class TransactionList implements OnInit{
   mainCategories: CategoryDto[] = [];
   subCategories: CategoryDto[] = [];
   categoriesMap = new Map<string, CategoryDto[]>();
+  categoryNameMap = new Map<string, string>();
   filterParams: FilterParams = {
     'sort-by': 'date',
     'sort-order': 'Desc'
@@ -67,6 +68,9 @@ export class TransactionList implements OnInit{
         console.log('Categories Map:', map);
         this.categoriesMap = map;
         this.mainCategories = map.get('root') || [];
+        map.forEach(categories => {
+          categories.forEach(cat => this.categoryNameMap.set(cat.code, cat.name));
+        });
         console.log('Main Categories:', this.mainCategories);
       },
       error: (err) => {
@@ -136,6 +140,14 @@ export class TransactionList implements OnInit{
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     }).format(amount);
+  }
+
+  getCategoryName(code: string): string {
+    return this.categoryNameMap.get(code) || code;
+  }
+
+  splitTransaction(transaction: TransactionDto) {
+    console.log('Split transaction', transaction);
   }
 
   previousPage() {
@@ -277,5 +289,12 @@ export class TransactionList implements OnInit{
       }
     }
     this.showCategoryDialog = false;
+  }
+
+  autoCategorize() {
+    this.service.autoCategorizeTransactions().subscribe({
+      next: () => this.loadTransactions(),
+      error: (err) => console.error('Error auto-categorizing transactions:', err)
+    });
   }
 }

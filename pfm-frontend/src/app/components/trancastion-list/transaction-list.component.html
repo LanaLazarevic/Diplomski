@@ -42,21 +42,56 @@
       </div>
     }
 
-    <!-- Filter Button -->
-    <div class="mb-4 flex justify-end">
-      <button (click)="toggleFilter()" class="px-4 py-2 bg-[#4a3a6e] text-white rounded-lg hover:bg-[#5d4a85] transition-colors">
-        Filter
-      </button>
-    </div>
+      <!-- Actions Row -->
+      <div class="mb-4 flex justify-between">
+        <button (click)="autoCategorize()" class="px-4 py-2 bg-[#4a3a6e] text-white rounded-lg hover:bg-[#5d4a85] transition-colors">
+          Auto-categorize
+        </button>
+        <button (click)="toggleFilter()" class="px-4 py-2 bg-[#4a3a6e] text-white rounded-lg hover:bg-[#5d4a85] transition-colors">
+          Filter
+        </button>
+      </div>
 
     <!-- Filter Form -->
     @if (showFilter) {
-      <div class="bg-[#363536] rounded-lg shadow-sm mb-6 p-6 border border-[#2a292a]">
-        <form (ngSubmit)="applyFilters()" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Kind Filter -->
+
+      <div class="mb-6 rounded-lg border border-[#2a292a] shadow-lg overflow-hidden">
+        <form (ngSubmit)="applyFilters()" class="p-4 grid grid-cols-2 gap-4 bg-[#363536]">
           <div>
-            <label class="block text-sm font-medium text-gray-300 mb-1">Transaction Kind</label>
-            <select [(ngModel)]="filterParams['transaction-kind']" name="kind" multiple class="w-full bg-[#2a292a] border border-[#3d3c3d] text-white rounded-lg p-2">
+            <label class="block text-sm font-medium text-purple-200 mb-1">Start Date</label>
+            <input type="date" [(ngModel)]="filterParams['start-date']" name="startDate" class="w-full bg-[#2a292a] border border-[#3d3c3d] text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-purple-200 mb-1">End Date</label>
+            <input type="date" [(ngModel)]="filterParams['end-date']" name="endDate" class="w-full bg-[#2a292a] border border-[#3d3c3d] text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+          </div>
+
+          <!-- Sort Options -->
+          <div>
+            <label class="block text-sm font-medium text-purple-200 mb-1">Sort By</label>
+            <select [(ngModel)]="filterParams['sort-by']" name="sortBy" class="w-full bg-[#2a292a] border border-[#3d3c3d] text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+              <option value="date">Date</option>
+              <option value="amount">Amount</option>
+              <option value="description">Description</option>
+              <option value="mcc">MCC</option>
+              <option value="kind">Transaction kind</option>
+              <option value="catcode">Category</option>
+              <option value="beneficiaryname">Beneficiary</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-purple-200 mb-1">Sort Order</label>
+            <select [(ngModel)]="filterParams['sort-order']" name="sortOrder" class="w-full bg-[#2a292a] border border-[#3d3c3d] text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+              <option value="Desc">Descending</option>
+              <option value="Asc">Ascending</option>
+            </select>
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-purple-200 mb-1">Transaction Kind</label>
+            <select [(ngModel)]="filterParams['transaction-kind']" name="kind" multiple class="w-full bg-[#2a292a] border border-[#3d3c3d] text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
               <option value="dep">Deposit</option>
               <option value="wdw">Withdrawal</option>
               <option value="pmt">Payment</option>
@@ -74,127 +109,22 @@
             </select>
           </div>
 
-          <!-- Date Range -->
-          <div>
-            <label class="block text-sm font-medium text-gray-300 mb-1">Start Date</label>
-            <input type="date" [(ngModel)]="filterParams['start-date']" name="startDate" class="w-full bg-[#2a292a] border border-[#3d3c3d] text-white rounded-lg p-2">
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-300 mb-1">End Date</label>
-            <input type="date" [(ngModel)]="filterParams['end-date']" name="endDate" class="w-full bg-[#2a292a] border border-[#3d3c3d] text-white rounded-lg p-2">
-          </div>
-
-          <!-- Sort Options -->
-          <div>
-            <label class="block text-sm font-medium text-gray-300 mb-1">Sort By</label>
-            <select [(ngModel)]="filterParams['sort-by']" name="sortBy" class="w-full bg-[#2a292a] border border-[#3d3c3d] text-white rounded-lg p-2">
-              <option value="date">Date</option>
-              <option value="amount">Amount</option>
-              <option value="description">Description</option>
-              <option value="mcc">MCC</option>
-              <option value="kind">Transaction kind</option>
-              <option value="catcode">Category</option>
-              <option value="beneficiaryname">Beneficiary</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-300 mb-1">Sort Order</label>
-            <select [(ngModel)]="filterParams['sort-order']" name="sortOrder" class="w-full bg-[#2a292a] border border-[#3d3c3d] text-white rounded-lg p-2">
-              <option value="Desc">Descending</option>
-              <option value="Asc">Ascending</option>
-            </select>
-          </div>
-
-          <div class="flex items-end">
-            <button type="submit" class="px-4 py-2 bg-[#4a3a6e] text-white rounded-lg hover:bg-[#5d4a85] transition-colors">
-              Apply Filters
-            </button>
-            <button type="button" (click)="resetFilters()" class="ml-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
-              Reset
-            </button>
+          <!-- Actions -->
+          <div class="md:col-span-2 flex items-end justify-end space-x-2">
+            <button type="submit" class="px-4 py-2 bg-[#4a3a6e] text-white rounded-lg hover:bg-[#5d4a85] transition-colors">Apply Filters</button>
+            <button type="button" (click)="resetFilters()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">Reset</button>
           </div>
         </form>
       </div>
     }
 
-    <!-- Transactions Table -->
+      <!-- Transactions Cards -->
     @if (!loading && !error) {
-      <div class="bg-[#363536] rounded-lg shadow-sm overflow-hidden border border-[#2a292a]">
-        <!-- Table Header -->
+      <div class="bg-[#363536] rounded-lg shadow-sm border border-[#2a292a]">
         <div class="px-6 py-4 border-b border-[#2a292a]">
-          <h2 class="text-lg font-semibold text-purple-400">
-            Transactions
-          </h2>
+          <h2 class="text-lg font-semibold text-purple-400">Transactions</h2>
         </div>
 
-        <!-- Table -->
-        <div class="overflow-x-auto">
-          <table class="min-w-full text-sm">
-            <thead class="bg-[#2a292a]">
-            <tr>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">ID</th>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">DATE</th>
-              <th class="px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">DIR</th>
-              <th class="px-4 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">AMOUNT</th>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">BENEFICIARY</th>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">DESCRIPTION</th>
-              <th class="px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">CURRENCY</th>
-              <th class="px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">MCC</th>
-              <th class="px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">KIND</th>
-              <th class="px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">CATEGORY</th>
-              <th class="px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">SPLIT</th>
-            </tr>
-            </thead>
-            <tbody class="divide-y divide-[#2a292a]">
-              @for (transaction of pagedTransactions?.items; track transaction.id) {
-                <tr class="hover:bg-[#2a292a]">
-                  <td class="px-4 py-3 whitespace-nowrap text-sm font-mono text-white">{{ transaction.id }}</td>
-                  <td class="px-4 py-3 whitespace-nowrap text-sm text-white">{{ formatDate(transaction.date) }}</td>
-                  <td class="px-4 py-3 whitespace-nowrap text-center text-xl">
-                    <span [ngClass]="{
-                      'text-green-400': transaction.direction === 'c',
-                      'text-red-400': transaction.direction === 'd'
-                    }">
-                      {{ transaction.direction === 'c' ? '↑' : '↓' }}
-                    </span>
-                  </td>
-                  <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium text-white">
-                    {{ formatAmount(transaction.amount) }}
-                  </td>
-                  <td class="px-4 py-3 text-sm text-white max-w-[150px] truncate">{{ transaction.beneficiaryName || '-' }}</td>
-                  <td class="px-4 py-3 text-sm text-white max-w-[200px] truncate">{{ transaction.description || '-' }}</td>
-                  <td class="px-4 py-3 whitespace-nowrap text-center text-sm text-white">{{ transaction.currency }}</td>
-                  <td class="px-4 py-3 whitespace-nowrap text-center text-sm text-white">{{ transaction.mcc || '-' }}</td>
-                  <td class="px-4 py-3 whitespace-nowrap text-center">
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border"
-                          [ngClass]="kindClasses(transaction.kind)">
-                      {{ getTransactionTypeLabel(transaction.kind) }}
-                    </span>
-                  </td>
-                  <td class="px-4 py-3 whitespace-nowrap text-center text-sm text-white">
-                    @if (transaction.catCode) {
-                      {{ transaction.catCode }}
-                    } @else {
-                      <button (click)="openCategoryDialog(transaction)"
-                              class="px-2 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 text-xs">
-                        Add Category
-                      </button>
-                    }
-                  <td class="px-4 py-3 text-center text-sm text-white">
-                    @if (transaction.splits.length > 0) {
-                      <i class="fas fa-code-branch text-purple-400"
-                         title="Split transaction ({{transaction.splits.length}} parts)"></i>
-                    } @else {
-                      <span>-</span>
-                    }
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
 
         <!-- Empty State -->
         @if (pagedTransactions?.items?.length === 0) {
@@ -205,9 +135,58 @@
             <h3 class="mt-4 text-lg font-semibold text-white">No transactions</h3>
             <p class="mt-2 text-sm text-gray-300">There are no transactions right now.</p>
           </div>
+        } @else {
+          <div class="p-6 grid grid-cols-1 gap-4">
+            @for (transaction of pagedTransactions?.items; track transaction.id) {
+              <div class="bg-[#2a292a] rounded-lg p-4 flex flex-col h-full border border-[#3d3c3d]">
+                <!-- Top: id/date and kind tag -->
+                <div class="flex justify-between items-start">
+                  <div>
+                    <p class="text-xs text-gray-400">#{{ transaction.id }}</p>
+                    <p class="text-sm text-white">{{ formatDate(transaction.date) }}</p>
+                  </div>
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium border" [ngClass]="kindClasses(transaction.kind)">
+                    {{ getTransactionTypeLabel(transaction.kind) }}
+                  </span>
+                </div>
+                <!-- Amount, direction and details -->
+                <div class="mt-4 flex items-start">
+                  <div class="flex items-center space-x-2">
+                    <span class="text-2xl" [ngClass]="{'text-green-400': transaction.direction === 'c','text-red-400': transaction.direction === 'd'}">
+                      {{ transaction.direction === 'c' ? '↑' : '↓' }}
+                    </span>
+                    <p class="text-2xl font-bold text-white">{{ formatAmount(transaction.amount) }}</p>
+                  </div>
+                  <div class="ml-6 text-sm text-gray-300 grid grid-cols-2 gap-x-4 gap-y-1">
+                    <p>Beneficiary: {{ transaction.beneficiaryName || '-' }}</p>
+                    <p>Currency: {{ transaction.currency }}</p>
+                    <p>Description: {{ transaction.description || '-' }}</p>
+                    <p>MCC: {{ transaction.mcc || '-' }}</p>
+                  </div>
+                </div>
+                <!-- Categories -->
+                <div class="mt-4 pt-2 border-t border-[#3d3c3d] flex justify-between items-end">
+                  <div class="flex flex-wrap gap-2">
+                    @if (transaction.splits.length > 0) {
+                      @for (split of transaction.splits; track split.catCode) {
+                        <span class="px-2 py-1 rounded text-sm font-medium bg-[#4a3a6e] text-white">{{ getCategoryName(split.catCode) }} - {{ formatAmount(split.amount) }}</span>
+                      }
+                    } @else {
+                      @if (transaction.catCode) {
+                        <span class="px-2 py-1 rounded text-sm font-medium bg-[#4a3a6e] text-white">{{ getCategoryName(transaction.catCode) }}</span>
+                      } @else {
+                        <button (click)="openCategoryDialog(transaction)" class="px-2 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 text-sm">Add Category</button>
+                      }
+                    }
+                  </div>
+                  <button (click)="splitTransaction(transaction)" class="px-2 py-1 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 text-sm">Split</button>
+                </div>
+              </div>
+            }
+          </div>
         }
       </div>
-
+    }
       <!-- Pagination -->
       @if (pagedTransactions && pagedTransactions.totalPages > 1) {
         <div class="flex justify-center mt-8">
@@ -256,7 +235,6 @@
           </nav>
         </div>
       }
-    }
     </div>
   </div>
 </div>

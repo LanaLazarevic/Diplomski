@@ -62,7 +62,15 @@ export class TransactionService {
     return this.http.post(
       `${this.apiUrl}/${transactionId}/categorize`,
       body,
-      { responseType: 'text' }
+      { responseType: 'text', headers : this.getHeaders() }
+    );
+  }
+
+  autoCategorizeTransactions(): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/auto-categorize`,
+      {},
+      { headers: this.getHeaders(), responseType: 'text' }
     );
   }
 
