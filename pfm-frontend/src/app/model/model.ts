@@ -9,6 +9,7 @@ export interface TransactionDto {
   mcc?: string;
   kind: string;
   catCode?: string;
+  cardNumber?: string;
   splits: SplitItemDto[];
 }
 
@@ -38,6 +39,7 @@ export interface TransactionDtoRaw {
   mcc?: string;
   kind: string;
   catcode?: string;
+  'card-number'?: string;
   splits: SplitItemDtoRaw[];
 }
 
@@ -82,4 +84,10 @@ export interface BusinessError {
   problem: string;
   message: string;
   details: string;
+}
+
+export interface Split {
+  catcode: string;
+  subcatcode: string;
+  amount: number;
 }

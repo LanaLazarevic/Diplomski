@@ -42,6 +42,47 @@
       </div>
     }
 
+      @if (showSplitDialog) {
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div class="bg-[#2a292a] rounded-lg w-[90%] max-w-xl p-6 max-h-[90vh] overflow-y-auto text-white">
+            <h2 class="text-xl font-semibold text-center text-purple-400 mb-2">Split transaction</h2>
+            <p class="text-sm text-gray-400 text-center mb-4">Please split the transaction into categories:</p>
+            <div class="space-y-4">
+              @for (entry of splitEntries; track $index) {
+                <div class="border border-[#3d3c3d] rounded-lg p-4">
+                  <label class="block text-sm text-gray-300 mb-1">Category</label>
+                  <select [(ngModel)]="entry.catcode" class="w-full bg-[#1f1f1f] border border-[#3d3c3d] rounded p-2 text-white">
+                    <option value="" disabled selected>Choose category</option>
+                    @for (cat of mainCategories; track cat.code) {
+                      <option [ngValue]="cat.code">{{cat.name}}</option>
+                    }
+                  </select>
+                  <label class="block text-sm text-gray-300 mt-3 mb-1">Subcategory (optional)</label>
+                  <select [(ngModel)]="entry.subcatcode" class="w-full bg-[#1f1f1f] border border-[#3d3c3d] rounded p-2 text-white">
+                    <option value="">None</option>
+                    @if (entry.catcode) {
+                      @for (sub of categoriesMap.get(entry.catcode) || []; track sub.code) {
+                        <option [ngValue]="sub.code">{{sub.name}}</option>
+                      }
+                    }
+                  </select>
+                  <label class="block text-sm text-gray-300 mt-3 mb-1">Amount for this split</label>
+                  <input type="number" [(ngModel)]="entry.amount" class="w-full bg-[#1f1f1f] border border-[#3d3c3d] rounded p-2 text-white" placeholder="Enter amount">
+                </div>
+              }
+            </div>
+
+            <button (click)="addSplitEntry()" class="mt-4 text-sm text-blue-400">+ Add new split</button>
+            <p class="text-sm text-gray-400 mt-2">Total entered: {{ formatAmount(calculateSplitTotal()) }} / {{ formatAmount(selectedTransaction?.amount || 0) }}</p>
+            <div class="flex justify-end mt-6 space-x-4">
+              <button (click)="closeSplitDialog()" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">Cancel</button>
+              <button (click)="applySplit()" [disabled]="!splitTotalMatches()"  class="px-4 py-2 rounded text-white" [ngClass]="splitTotalMatches() ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-600 cursor-not-allowed'">Apply</button>
+            </div>
+          </div>
+        </div>
+      }
+
+
       <!-- Actions Row -->
       <div class="mb-4 flex justify-between">
         <button (click)="autoCategorize()" class="px-4 py-2 bg-[#4a3a6e] text-white rounded-lg hover:bg-[#5d4a85] transition-colors">
@@ -144,6 +185,7 @@
                   <div>
                     <p class="text-xs text-gray-400">#{{ transaction.id }}</p>
                     <p class="text-sm text-white">{{ formatDate(transaction.date) }}</p>
+                    <p class="text-sm text-gray-400">{{ formatCardNumber(transaction.cardNumber) }}
                   </div>
                   <span class="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium border" [ngClass]="kindClasses(transaction.kind)">
                     {{ getTransactionTypeLabel(transaction.kind) }}

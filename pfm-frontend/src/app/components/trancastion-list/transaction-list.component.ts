@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CategoryDto, FilterParams, PagedList, TransactionDto} from '../../model/model';
+import {CategoryDto, FilterParams, PagedList, Split, TransactionDto} from '../../model/model';
 import {TransactionService} from '../../service/transaction-service';
 import {NgClass} from '@angular/common';
 import {FormsModule} from '@angular/forms';
@@ -31,6 +31,8 @@ export class TransactionList implements OnInit{
   subCategories: CategoryDto[] = [];
   categoriesMap = new Map<string, CategoryDto[]>();
   categoryNameMap = new Map<string, string>();
+  showSplitDialog = false;
+  splitEntries: Split[] = [];
   filterParams: FilterParams = {
     'sort-by': 'date',
     'sort-order': 'Desc'
@@ -147,7 +149,70 @@ export class TransactionList implements OnInit{
   }
 
   splitTransaction(transaction: TransactionDto) {
-    console.log('Split transaction', transaction);
+    this.selectedTransaction = transaction;
+    this.splitEntries = [{ catcode: '', amount: 0, subcatcode: '' }, { catcode: '', amount: 0, subcatcode: '' }];
+    this.showSplitDialog = true;
+  }
+
+  addSplitEntry() {
+    this.splitEntries.push({ catcode: '', amount: 0, subcatcode: '' });
+  }
+
+  calculateSplitTotal(): number {
+    return this.splitEntries.reduce((sum, entry) => sum + (entry.amount || 0), 0);
+  }
+
+  closeSplitDialog() {
+    this.showSplitDialog = false;
+    this.selectedTransaction = null;
+  }
+
+  splitTotalMatches(): boolean {
+    return !!this.selectedTransaction &&
+      this.calculateSplitTotal() === this.selectedTransaction.amount;
+  }
+
+  applySplit() {
+    if (!this.selectedTransaction) return;
+
+    const splits = this.splitEntries
+      .map(entry => {
+        const catcode = entry.subcatcode || entry.catcode;
+        const amount = entry.amount;
+        return catcode && amount !== null ? { catcode, amount: amount! } : null;
+      })
+      .filter((s): s is { catcode: string; amount: number } => s !== null);
+
+    this.service.splitTransaction(this.selectedTransaction.id, { splits }).subscribe({
+      next: () => {
+        if (this.pagedTransactions?.items) {
+          const transaction = this.pagedTransactions.items.find(t => t.id === this.selectedTransaction?.id);
+          if (transaction) {
+            transaction.splits = splits.map(s => ({ catCode: s.catcode, amount: s.amount }));
+          }
+        }
+        this.closeSplitDialog();
+      },
+      error: (err) => {
+        console.error('Error splitting transaction:', err);
+        this.closeSplitDialog();
+      }
+    });
+  }
+
+  formatCardNumber(cardNumber?: string): string {
+    if (!cardNumber) {
+      return '-';
+    }
+    const digits = cardNumber.replace(/\s+/g, '');
+    if (digits.length <= 8) {
+      return digits;
+    }
+    const first4 = digits.slice(0, 4);
+    const last4 = digits.slice(-4);
+    const middle = '*'.repeat(digits.length - 8);
+    const grouped = (first4 + middle + last4).match(/.{1,4}/g);
+    return grouped ? grouped.join(' ') : first4 + middle + last4;
   }
 
   previousPage() {

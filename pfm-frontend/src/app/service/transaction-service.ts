@@ -43,6 +43,7 @@ export class TransactionService {
             mcc: r.mcc,
             kind: r.kind,
             catCode: r.catcode,
+            cardNumber: r['card-number'],
             splits: r.splits?.map(s => ({
               catCode: s.catcode,
               amount: s.amount
@@ -70,6 +71,14 @@ export class TransactionService {
     return this.http.post(
       `${this.apiUrl}/auto-categorize`,
       {},
+      { headers: this.getHeaders(), responseType: 'text' }
+    );
+  }
+
+  splitTransaction(transactionId: string, body: { splits: { catcode: string; amount: number }[] }): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/${transactionId}/split`,
+      body,
       { headers: this.getHeaders(), responseType: 'text' }
     );
   }
