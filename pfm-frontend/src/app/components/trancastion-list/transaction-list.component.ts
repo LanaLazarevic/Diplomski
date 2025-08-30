@@ -1,10 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {CategoryDto, FilterParams, PagedList, Split, TransactionDto} from '../../model/model';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {CategoryDto, FilterParams, PagedList, SpendingAnalyticsItem, Split, TransactionDto} from '../../model/model';
 import {TransactionService} from '../../service/transaction-service';
 import {NgClass} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {CategoryService} from '../../service/category-service';
 import {Sidebar} from '../sidebar/sidebar';
+import {LoginService} from '../../service/login-service';
+import {Chart, registerables, ChartEvent, ActiveElement} from 'chart.js';
+import {AnalyticsService} from '../../service/analytics-service';
+import {initFlowbite} from 'flowbite';
+
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-transaction-list',
@@ -33,12 +39,19 @@ export class TransactionList implements OnInit{
   categoryNameMap = new Map<string, string>();
   showSplitDialog = false;
   splitEntries: Split[] = [];
+  showAnalytics = false;
+  analyticsData: SpendingAnalyticsItem[] = [];
+  selectedCatcode: string | null = null;
+  startDate: string | null = null;
+  endDate: string | null = null;
+  @ViewChild('analyticsCanvas') analyticsCanvas!: ElementRef<HTMLCanvasElement>;
+  private analyticsChart: Chart | null = null;
   filterParams: FilterParams = {
     'sort-by': 'date',
     'sort-order': 'Desc'
   };
 
-  constructor(private service: TransactionService, private categoryService: CategoryService) {}
+  constructor(private service: TransactionService, private categoryService: CategoryService, private loginService: LoginService, private analyticsService: AnalyticsService) {}
 
   ngOnInit() {
     this.loadTransactions();
@@ -113,6 +126,9 @@ export class TransactionList implements OnInit{
     }
     if (this.filterParams['end-date']) {
       params['end-date'] = new Date(this.filterParams['end-date']).toISOString();
+    }
+    if (this.filterParams['catcode']) {
+      params['catcode'] = this.filterParams['catcode'];
     }
     this.service.getTransactions(this.currentPage, params)
       .subscribe({
@@ -362,4 +378,119 @@ export class TransactionList implements OnInit{
       error: (err) => console.error('Error auto-categorizing transactions:', err)
     });
   }
+
+  isAdmin(): boolean {
+    return this.loginService.isAdmin();
+  }
+
+  toggleAnalytics() {
+    this.showAnalytics = !this.showAnalytics;
+    if (this.showAnalytics) {
+      this.loadAnalytics();
+    } else {
+      this.resetAnalytics();
+      this.loadTransactions();
+    }
+  }
+
+  onDateChange() {
+    if (this.showAnalytics) {
+      this.loadAnalytics(this.selectedCatcode || undefined);
+    }
+  }
+
+  private resetAnalytics() {
+    this.analyticsChart?.destroy();
+    this.analyticsChart = null;
+    this.analyticsData = [];
+    this.selectedCatcode = null;
+    delete this.filterParams['catcode'];
+    delete this.filterParams['start-date'];
+    delete this.filterParams['end-date'];
+    this.startDate = null;
+    this.endDate = null;
+  }
+
+  backToMainAnalytics() {
+    this.loadAnalytics();
+  }
+
+  private loadAnalytics(catcode?: string) {
+    this.analyticsService.getSpendingAnalytics(catcode, this.startDate, this.endDate).subscribe({
+      next: data => {
+        this.analyticsData = data;
+        this.selectedCatcode = catcode || null;
+        if (catcode) {
+          this.filterParams['catcode'] = catcode;
+        } else {
+          delete this.filterParams['catcode'];
+        }
+        if (this.startDate) {
+          this.filterParams['start-date'] = this.startDate;
+        } else {
+          delete this.filterParams['start-date'];
+        }
+        if (this.endDate) {
+          this.filterParams['end-date'] = this.endDate;
+        } else {
+          delete this.filterParams['end-date'];
+        }
+        this.currentPage = 1;
+        this.loadTransactions();
+        this.renderChart();
+      },
+      error: err => console.error('Error loading analytics:', err)
+    });
+  }
+
+  private renderChart() {
+    if (!this.analyticsCanvas) return;
+    const labels = this.analyticsData.map(a => this.getCategoryName(a.catcode) || a.name);
+    const data = this.analyticsData.map(a => a.percentage);
+    const colors = ['#3b82f6','#ec4899','#8b5cf6','#10b981','#f59e0b','#ef4444','#6366f1','#22c55e','#eab308','#f97316'];
+    if (this.analyticsChart) {
+      this.analyticsChart.destroy();
+    }
+    const isDark = document.documentElement.classList.contains('dark');
+    const textColor = isDark ? '#fff' : '#374151';
+    this.analyticsChart = new Chart(this.analyticsCanvas.nativeElement, {
+      type: 'pie',
+      data: {
+        labels,
+        datasets: [{ data, backgroundColor: colors.slice(0, data.length) }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: textColor,
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            },
+            onClick: (_e: ChartEvent, legendItem: any) => {
+              const idx = legendItem.index;
+              if (idx !== undefined) {
+                const cat = this.analyticsData[idx].catcode;
+                this.loadAnalytics(cat);
+              }
+            }
+          }
+        },
+        onClick: (_evt: ChartEvent, elements: ActiveElement[]) => {
+          if (elements.length) {
+            const idx = elements[0].index;
+            const cat = this.analyticsData[idx].catcode;
+            this.loadAnalytics(cat);
+          }
+        }
+      }
+    });
+    initFlowbite();
+  }
+
+
 }

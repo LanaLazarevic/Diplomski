@@ -44,7 +44,7 @@ namespace PFM.Infrastructure.Persistence.Repositories
 
             if (!string.IsNullOrWhiteSpace(spec.Catcode))
             {
-                query = query.Where(t => t.CatCode == spec.Catcode || t.Splits.Any(s => s.CatCode == spec.Catcode));
+                query = query.Where(t => t.CatCode == spec.Catcode || t.Splits.Any(s => s.CatCode == spec.Catcode) || t.Category.ParentCode == spec.Catcode);
             }
 
             query = spec.SortBy.ToLower() switch

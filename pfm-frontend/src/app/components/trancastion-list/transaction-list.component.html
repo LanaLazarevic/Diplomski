@@ -88,11 +88,44 @@
         <button (click)="autoCategorize()" class="px-4 py-2 bg-[#4a3a6e] text-white rounded-lg hover:bg-[#5d4a85] transition-colors">
           Auto-categorize
         </button>
-        <button (click)="toggleFilter()" class="px-4 py-2 bg-[#4a3a6e] text-white rounded-lg hover:bg-[#5d4a85] transition-colors">
-          Filter
-        </button>
+        <div class="space-x-2">
+          <button (click)="toggleAnalytics()" class="px-4 py-2 bg-[#4a3a6e] text-white rounded-lg hover:bg-[#5d4a85] transition-colors">Analytics</button>
+          <button (click)="toggleFilter()" class="px-4 py-2 bg-[#4a3a6e] text-white rounded-lg hover:bg-[#5d4a85] transition-colors">
+            Filter
+          </button>
+        </div>
       </div>
-
+      @if (showAnalytics) {
+        <div class="mb-6 flex justify-center">
+          <div class="max-w-md w-full bg-white text-gray-900 rounded-lg shadow-sm dark:bg-gray-800 dark:text-white p-4 md:p-6">
+            <div class="flex justify-between items-start w-full">
+              <div class="flex-col items-center">
+                <div class="flex items-center mb-1">
+                  <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white me-1">Spending analytics</h5>
+                  @if (selectedCatcode) {
+                    <button (click)="backToMainAnalytics()" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500 ms-1">Back</button>
+                  }
+                </div>
+              </div>
+            </div>
+            <!-- Pie Chart -->
+            <div class="h-72" id="pie-chart">
+              <canvas #analyticsCanvas class="w-full h-full"></canvas>
+            </div>
+            <div class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
+              <div class="flex justify-center items-center pt-5 space-x-2">
+                <div class="relative">
+                  <input type="date" [(ngModel)]="startDate" (change)="onDateChange()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Start date" />
+                </div>
+                <span class="text-gray-900 dark:text-white">to</span>
+                <div class="relative">
+                  <input type="date" [(ngModel)]="endDate" (change)="onDateChange()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="End date" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
     <!-- Filter Form -->
     @if (showFilter) {
 
@@ -183,7 +216,9 @@
                 <!-- Top: id/date and kind tag -->
                 <div class="flex justify-between items-start">
                   <div>
-                    <p class="text-xs text-gray-400">#{{ transaction.id }}</p>
+                    @if (isAdmin()){
+                      <p class="text-xs text-gray-400">#{{ transaction.id }}</p>
+                    }
                     <p class="text-sm text-white">{{ formatDate(transaction.date) }}</p>
                     <p class="text-sm text-gray-400">{{ formatCardNumber(transaction.cardNumber) }}
                   </div>

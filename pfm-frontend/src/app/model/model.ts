@@ -64,6 +64,7 @@ export interface FilterParams {
   'end-date'?: string;
   'sort-by'?: string;
   'sort-order'?: string;
+  'catcode'?: string;
 }
 
 export interface CategoryDto {
@@ -90,4 +91,20 @@ export interface Split {
   catcode: string;
   subcatcode: string;
   amount: number;
+}
+
+export interface SpendingAnalyticsGroup {
+  catcode: string;
+  amount: number;
+  count: number;
+}
+
+export interface SpendingAnalyticsResponse {
+  groups: SpendingAnalyticsGroup[];
+}
+
+export interface SpendingAnalyticsItem {
+  catcode: string;
+  name: string;
+  percentage: number;
 }
