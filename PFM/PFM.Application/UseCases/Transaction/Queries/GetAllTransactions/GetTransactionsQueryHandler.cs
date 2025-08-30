@@ -53,7 +53,27 @@ namespace PFM.Application.UseCases.Transaction.Queries.GetAllTransactions
                 return OperationResult<PagedList<TransactionDto>>.Fail(400, errors);
             }
 
-            List<TransactionKind>? kindsEnum = null;
+            if (!string.IsNullOrEmpty(request.Catcode))
+            {
+                var cats = await _repository.Categories.GetByCodesAsync(new[] { request.Catcode }, cancellationToken);
+                var cat = cats.SingleOrDefault();
+                if (cat == null)
+                {
+                    BusinessError error = new BusinessError
+                    {
+                        Problem = "provided-category-does-not-exists",
+                        Details = $"Category '{request.Catcode}' not found.",
+                        Message = "The provided category does not exist."
+                    };
+                    List<BusinessError> errors = new List<BusinessError> { error };
+                    return OperationResult<PagedList<TransactionDto>>.Fail(440, errors);
+
+                }
+            }
+
+
+
+                List<TransactionKind>? kindsEnum = null;
             if (request.Kind != null && request.Kind.Any())
             {
                 var parsed = new List<TransactionKind>();
@@ -90,7 +110,8 @@ namespace PFM.Application.UseCases.Transaction.Queries.GetAllTransactions
                 request.PageSize,
                 request.SortBy,
                 sortEnum,
-                request.UserId
+                request.UserId,
+                request.Catcode
             );
 
             try

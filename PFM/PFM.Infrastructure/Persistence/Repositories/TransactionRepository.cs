@@ -42,6 +42,11 @@ namespace PFM.Infrastructure.Persistence.Repositories
             if (spec.UserId.HasValue)
                 query = query.Where(t => t.Card.UserId == spec.UserId);
 
+            if (!string.IsNullOrWhiteSpace(spec.Catcode))
+            {
+                query = query.Where(t => t.CatCode == spec.Catcode || t.Splits.Any(s => s.CatCode == spec.Catcode));
+            }
+
             query = spec.SortBy.ToLower() switch
             {
                 "id" => spec.SortOrder == SortOrder.Asc

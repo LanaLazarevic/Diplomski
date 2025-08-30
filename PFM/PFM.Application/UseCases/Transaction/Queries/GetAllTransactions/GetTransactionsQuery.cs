@@ -38,6 +38,9 @@ namespace PFM.Application.UseCases.Transaction.Queries.GetAllTransactions
         [FromQuery(Name = "sort-order")]
         public string SortOrder { get; set; } = "Desc";
 
+        [FromQuery(Name = "catcode")]
+        public string? Catcode { get; set; }
+
         [JsonIgnore]
         public Guid? UserId { get; set; }
     }

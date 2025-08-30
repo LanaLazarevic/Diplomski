@@ -24,6 +24,8 @@ namespace PFM.Domain.Dtos
         public SortOrder SortOrder { get; }
         public Guid? UserId { get; set; }
 
+        public string Catcode { get; set; }
+
         public TransactionQuerySpecification(
             DateTime? startDate,
             DateTime? endDate,
@@ -32,7 +34,8 @@ namespace PFM.Domain.Dtos
             int pageSize,
             string sortBy,
             SortOrder sortOrder,
-            Guid? userId)
+            Guid? userId,
+            string catcode)
         {
             StartDate = startDate;
             EndDate = endDate;
@@ -42,6 +45,7 @@ namespace PFM.Domain.Dtos
             SortBy = !string.IsNullOrWhiteSpace(sortBy) ? sortBy : "date";
             SortOrder = sortOrder;
             UserId = userId;
+            Catcode = catcode;
         }
     }
 }
