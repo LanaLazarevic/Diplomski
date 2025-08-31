@@ -22,6 +22,10 @@ namespace PFM.Infrastructure.Persistence.Repositories
         {
             _context.Cards.Add(card);
         }
+        public void Update(Card card)
+        {
+            _context.Cards.Update(card);
+        }
         public async Task<Card?> GetByIdAsync(Guid id, CancellationToken ct = default)
         {
             return await _context.Cards.FindAsync(new object?[] { id }, ct);

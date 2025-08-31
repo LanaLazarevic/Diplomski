@@ -15,5 +15,8 @@ namespace PFM.Domain.Interfaces
         Task<Card?> GetByIdAsync(Guid id, CancellationToken ct = default);
 
         Task<PagedList<Card>> GetCardsAsync(CardQuerySpecification spec, CancellationToken ct = default);
+
+        void Update(Card card);
+
     }
 }
