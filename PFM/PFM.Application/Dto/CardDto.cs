@@ -32,5 +32,8 @@ namespace PFM.Application.Dto
 
         [JsonPropertyName("user-id")]
         public Guid UserId { get; set; }
+
+        [JsonPropertyName("is-active")]
+        public bool IsActive { get; set; }
     }
 }

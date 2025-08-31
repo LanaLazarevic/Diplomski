@@ -23,6 +23,8 @@ namespace PFM.Domain.Entities
 
         public CardTypeEnum CardType { get; set; }
 
+        public bool IsActive { get; set; }
+
         public Guid UserId { get; set; }
 
         public User User { get; set; }

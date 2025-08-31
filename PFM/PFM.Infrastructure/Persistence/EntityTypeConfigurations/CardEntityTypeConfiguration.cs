@@ -44,6 +44,10 @@ namespace PFM.Infrastructure.Persistence.EntityTypeConfigurations
                 .HasColumnType("decimal(20,2)")
                 .IsRequired();
 
+            builder.Property(c => c.IsActive)
+                .HasColumnName("is_active")
+                .IsRequired();
+
             builder.Property(c => c.UserId)
                 .HasColumnName("user_id")
                 .IsRequired();
