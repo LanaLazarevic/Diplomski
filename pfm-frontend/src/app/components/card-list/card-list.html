@@ -1,0 +1,95 @@
+<div class="flex">
+  <app-sidebar></app-sidebar>
+  <div class="ml-40 sm:ml-56 md:ml-64 flex-1 min-h-screen bg-[#424042] py-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+      <div class="bg-gradient-to-r from-[#4a3a6e] to-[#2a292a] rounded-lg shadow-lg mb-8 p-6 border border-[#3d3c3d]">
+        <h1 class="text-3xl font-bold text-white mb-2">Cards</h1>
+        <p class="text-purple-200">Overview of all cards</p>
+      </div>
+
+      @if (loading) {
+        <div class="bg-[#363536] rounded-lg shadow-sm p-8 text-center border border-[#2a292a]">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#7c5cf6] mx-auto mb-4"></div>
+          <p class="text-gray-300">Loading cards...</p>
+        </div>
+      }
+
+      @if (error) {
+        <div class="bg-red-900/20 rounded-lg p-4 mb-6 border border-red-900/30">
+          <div class="flex items-center">
+            <svg class="w-5 h-5 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-red-300 font-medium">Failed to load cards</span>
+          </div>
+        </div>
+      }
+
+      @if (!loading && !error) {
+        @if (!isAdmin()) {
+          <div class="flex flex-wrap justify-center gap-6 mb-8">
+            @for (card of pagedCards?.items || []; track card.id; let i = $index) {
+              <div class="w-full max-w-sm rounded-xl p-6 text-white shadow-lg"
+                   [ngClass]="i % 2 === 0 ? 'bg-gradient-to-r from-blue-500 to-purple-500' : 'bg-gradient-to-r from-orange-400 to-pink-500'">
+                <div class="flex justify-between items-center mb-6">
+                  <div class="text-lg font-semibold">{{card.ownerName}}</div>
+                  <div class="text-sm">{{card.cardType}}</div>
+                </div>
+                <div class="text-sm">Card Number</div>
+                <div class="text-lg font-mono tracking-widest mb-6">{{formatCardNumber(card.cardNumber)}}</div>
+                <div class="flex justify-between text-sm">
+                  <div>
+                    <div class="uppercase text-xs">Expiry</div>
+                    <div>{{card.expirationDate}}</div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+
+        <div class="space-y-4">
+          @for (card of pagedCards?.items || []; track card.id) {
+            <div class="bg-[#2a292a] rounded-lg p-4 flex flex-col h-full border border-[#3d3c3d]">
+              <div class="flex justify-between items-start">
+                <div>
+                  <p class="text-sm text-white">{{ formatCardNumber(card.cardNumber) }}</p>
+                  <p class="text-sm text-gray-400">Exp: {{ card.expirationDate }}</p>
+                  @if (isAdmin()) {
+                    <p class="text-sm text-gray-400">Owner: {{ card.ownerName }}</p>
+                  }
+                </div>
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium border"
+                      [ngClass]="card.isActive ? 'bg-green-900 text-green-300 border-green-700' : 'bg-red-900 text-red-300 border-red-700'">
+                  {{ card.cardType }}
+                </span>
+              </div>
+              <div class="mt-4 grid grid-cols-2 gap-4 text-sm text-gray-300">
+                @if (!isAdmin()) {
+                  <p>Reserved: {{ formatAmount(card.reservedAmount) }}</p>
+                  <p>Available: {{ formatAmount(card.availableAmount) }}</p>
+                }
+
+              </div>
+              @if (isAdmin() && card.isActive) {
+                <div class="mt-4 pt-2 border-t border-[#3d3c3d] flex justify-end">
+                  <button (click)="deactivate(card.id)" class="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700" [disabled]="!card.isActive">
+                    Deactivate
+                  </button>
+                </div>
+              } @else {
+                <div class="mt-4 pt-2 border-t border-[#3d3c3d] flex justify-end">
+                 <span class="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium border"
+                       [ngClass]="'bg-red-900 text-red-300 border-red-700'">
+                  Inactive
+                </span>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>

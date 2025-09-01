@@ -108,3 +108,27 @@ export interface SpendingAnalyticsItem {
   name: string;
   percentage: number;
 }
+
+export interface CardDto {
+  id: string;
+  ownerName: string;
+  cardNumber: string;
+  expirationDate: string;
+  availableAmount: number;
+  reservedAmount: number;
+  cardType: string;
+  userId: string;
+  isActive: boolean;
+}
+
+export interface CardDtoRaw {
+  id: string;
+  'owner-name': string;
+  'card-number': string;
+  'expiration-date': string;
+  'available-amount': number;
+  'reserved-amount': number;
+  'card-type': string;
+  'user-id': string;
+  'is-active': boolean;
+}
