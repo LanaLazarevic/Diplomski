@@ -96,7 +96,7 @@ namespace PFM.Api.Controllers
             return StatusCode(op.code, op.Value);
         }
 
-        [HttpPatch("{id}/deactivate")]
+        [HttpPut("{id}/deactivate")]
         [Authorize(Roles = nameof(RoleEnum.admin))]
         public async Task<IActionResult> Deactivate(Guid id)
         {
