@@ -1,0 +1,94 @@
+<div class="flex">
+  <app-sidebar></app-sidebar>
+  <div class="ml-40 sm:ml-56 md:ml-64 flex-1 min-h-screen bg-[#424042] py-8">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-gradient-to-r from-[#4a3a6e] to-[#2a292a] rounded-lg shadow-lg mb-8 p-6 border border-[#3d3c3d]">
+        <h1 class="text-3xl font-bold text-white mb-2">Create User</h1>
+        <p class="text-purple-200">Add new user</p>
+      </div>
+
+      @if (error) {
+        <div class="bg-red-900/20 rounded-lg p-4 mb-6 border border-red-900/30 text-red-300">{{ error }}</div>
+      }
+
+      <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-white mb-1">First Name</label>
+          <input type="text" name="firstName" [(ngModel)]="user.firstName" required
+                 class="w-full px-3 py-2 bg-[#363536] text-white rounded focus:outline-none focus:ring-2 focus:ring-purple-600 border-[#4a3a6e]"/>
+          @if (userForm.submitted && userForm.controls['firstName']?.invalid) {
+            <p class="text-red-400 text-sm mt-1">First name is required</p>
+          }
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-white mb-1">Last Name</label>
+          <input type="text" name="lastName" [(ngModel)]="user.lastName" required
+                 class="w-full px-3 py-2 bg-[#363536] text-white rounded focus:outline-none focus:ring-2 focus:ring-purple-600 border-[#4a3a6e]"/>
+          @if (userForm.submitted && userForm.controls['lastName']?.invalid) {
+            <p class="text-red-400 text-sm mt-1">Last name is required</p>
+          }
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-white mb-1">Email</label>
+          <input type="email" name="email" [(ngModel)]="user.email" required
+                 class="w-full px-3 py-2 bg-[#363536] text-white rounded focus:outline-none focus:ring-2 focus:ring-purple-600 border-[#4a3a6e]"/>
+          @if (userForm.submitted && userForm.controls['email']?.invalid) {
+            <p class="text-red-400 text-sm mt-1">Valid email is required</p>
+          }
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-white mb-1">Password</label>
+          <input type="password" name="password" [(ngModel)]="user.password" required
+                 class="w-full px-3 py-2 bg-[#363536] text-white rounded focus:outline-none focus:ring-2 focus:ring-purple-600 border-[#4a3a6e]"/>
+          @if (userForm.submitted && userForm.controls['password']?.invalid) {
+            <p class="text-red-400 text-sm mt-1">Password is required</p>
+          }
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-white mb-1">Address</label>
+          <input type="text" name="address" [(ngModel)]="user.address"
+                 class="w-full px-3 py-2 bg-[#363536] text-white rounded focus:outline-none focus:ring-2 focus:ring-purple-600 border-[#4a3a6e]"/>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-white mb-1">Phone Number</label>
+          <input type="text" name="phoneNumber" [(ngModel)]="user.phoneNumber"  required
+                 class="w-full px-3 py-2 bg-[#363536] text-white rounded focus:outline-none focus:ring-2 focus:ring-purple-600 border-[#4a3a6e]"/>
+          @if (userForm.submitted && userForm.controls['phoneNumber']?.invalid) {
+            <p class="text-red-400 text-sm mt-1">Phone number must contain only digits</p>
+          }
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-white mb-1">Birthday</label>
+          <input type="date" name="birthday" [(ngModel)]="user.birthday" [max]="maxDate" required
+                 class="w-full px-3 py-2 bg-[#363536] text-white rounded focus:outline-none focus:ring-2 focus:ring-purple-600 border-[#4a3a6e]"/>
+          @if (userForm.submitted && userForm.controls['birthday']?.invalid) {
+            <p class="text-red-400 text-sm mt-1">Valid birthday is required</p>
+          }
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-white mb-1">Role</label>
+          <select name="role" [(ngModel)]="user.role" required
+                  class="w-full px-3 py-2 bg-[#363536] text-white rounded focus:outline-none focus:ring-2 focus:ring-purple-600 border-[#4a3a6e]">
+            <option value="user">user</option>
+            <option value="admin">admin</option>
+          </select>
+          @if (userForm.submitted && userForm.controls['role']?.invalid) {
+            <p class="text-red-400 text-sm mt-1">Role is required</p>
+          }
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-white mb-1">JMBG</label>
+          <input type="text" name="jmbg" [(ngModel)]="user.jmbg" required pattern="^[0-9]{13}$" maxlength="13"
+                 class="w-full px-3 py-2 bg-[#363536] text-white rounded focus:outline-none focus:ring-2 focus:ring-purple-600 border-[#4a3a6e]"/>
+          @if (userForm.submitted && userForm.controls['jmbg']?.invalid) {
+            <p class="text-red-400 text-sm mt-1">JMBG must be 13 digits</p>
+          }
+        </div>
+        <div class="flex space-x-4 pt-4">
+          <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">Create</button>
+          <button type="button" (click)="backToUsers()" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -175,3 +175,15 @@ export interface UpdateUserDto {
   address?: string;
   phoneNumber?: string;
 }
+
+export interface CreateUserDto {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  address?: string;
+  phoneNumber?: string;
+  birthday: string;
+  role: string;
+  jmbg: string;
+}

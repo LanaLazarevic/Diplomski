@@ -26,7 +26,7 @@ namespace PFM.Application.Dto
         public string? Address { get; set; }
 
         [JsonPropertyName("phone-number")]
-        public string? PhoneNumber { get; set; }
+        public required string PhoneNumber { get; set; }
 
         [JsonPropertyName("birthday")]
         public DateOnly Birthday { get; set; }

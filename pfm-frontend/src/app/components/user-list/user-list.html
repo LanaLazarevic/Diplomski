@@ -26,6 +26,9 @@
       }
 
       @if (!loading && !error) {
+        <div class="flex justify-end mb-4">
+          <button (click)="createUser()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">New User</button>
+        </div>
         <div class="overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-[#2a292a]">

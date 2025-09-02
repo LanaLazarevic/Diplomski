@@ -45,6 +45,10 @@ export class UserList implements OnInit {
     this.router.navigate(['/users/update', user.id], { state: { user } });
   }
 
+  createUser() {
+    this.router.navigate(['/users/create']);
+  }
+
   formatDate(date: string): string {
     return new Date(date).toLocaleDateString();
   }

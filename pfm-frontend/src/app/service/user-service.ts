@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
-import {PagedList, PagedListRaw, UpdateUserDto, UserDto, UserDtoRaw} from '../model/model';
+import {CreateUserDto, PagedList, PagedListRaw, UpdateUserDto, UserDto, UserDtoRaw} from '../model/model';
 
 @Injectable({
   providedIn: 'root'
@@ -51,6 +51,24 @@ export class UserService {
       'phone-number': user.phoneNumber
     };
     return this.http.put(`${this.apiUrl}/${id}`, body, {
+      headers: this.getHeaders(),
+      responseType: 'text'
+    });
+  }
+
+  createUser(user: CreateUserDto): Observable<any> {
+    const body = {
+      'first-name': user.firstName,
+      'last-name': user.lastName,
+      'email': user.email,
+      'password': user.password,
+      'address': user.address,
+      'phone-number': user.phoneNumber,
+      'birthday': user.birthday,
+      'role': user.role,
+      'jmbg': user.jmbg
+    };
+    return this.http.post(this.apiUrl, body, {
       headers: this.getHeaders(),
       responseType: 'text'
     });

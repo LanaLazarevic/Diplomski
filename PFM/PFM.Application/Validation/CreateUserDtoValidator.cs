@@ -24,6 +24,7 @@ namespace PFM.Application.Validation
                 .NotEmpty().WithMessage("password:required:password is required");
 
             RuleFor(x => x.PhoneNumber)
+                .NotEmpty().WithMessage("phone-number:required:phone-number is required")
                 .Matches("^\\+?[0-9]*$")
                 .When(x => !string.IsNullOrWhiteSpace(x.PhoneNumber))
                 .WithMessage("phone-number:invalid-format:phone-number must contain only digits");
