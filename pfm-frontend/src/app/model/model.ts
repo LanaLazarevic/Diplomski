@@ -166,3 +166,12 @@ export interface UserDtoRaw {
   jmbg: string;
   role: string;
 }
+
+export interface UpdateUserDto {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  password?: string;
+  address?: string;
+  phoneNumber?: string;
+}

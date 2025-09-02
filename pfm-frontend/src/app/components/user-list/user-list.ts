@@ -4,6 +4,7 @@ import {UserService} from '../../service/user-service';
 import {LoginService} from '../../service/login-service';
 import {Sidebar} from '../sidebar/sidebar';
 import {NgClass} from '@angular/common';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-user-list',
@@ -19,7 +20,7 @@ export class UserList implements OnInit {
   loading = false;
   error = false;
 
-  constructor(private service: UserService, private loginService: LoginService) {}
+  constructor(private service: UserService, private loginService: LoginService, private router: Router) {}
 
   ngOnInit() {
     this.loadUsers();
@@ -40,8 +41,8 @@ export class UserList implements OnInit {
     });
   }
 
-  updateUser(id: string) {
-    console.log('Update user', id);
+  updateUser(user: UserDto) {
+    this.router.navigate(['/users/update', user.id], { state: { user } });
   }
 
   formatDate(date: string): string {

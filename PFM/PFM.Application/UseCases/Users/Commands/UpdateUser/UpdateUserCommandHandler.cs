@@ -60,12 +60,18 @@ namespace PFM.Application.UseCases.Users.Commands.UpdateUser
                     return OperationResult.Fail(440, new[] { error });
                 }
 
-                user.FirstName = dto.FirstName;
-                user.LastName = dto.LastName;
-                user.Email = dto.Email;
-                user.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
-                user.Address = dto.Address;
-                user.PhoneNumber = dto.PhoneNumber;
+                if(!string.IsNullOrEmpty(dto.FirstName))
+                    user.FirstName = dto.FirstName;
+                if (!string.IsNullOrEmpty(dto.LastName))
+                    user.LastName = dto.LastName;
+                if (!string.IsNullOrEmpty(dto.Email))
+                    user.Email = dto.Email;
+                if (!string.IsNullOrEmpty(dto.Password))
+                    user.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+                if (!string.IsNullOrEmpty(dto.Address))
+                    user.Address = dto.Address;
+                if (!string.IsNullOrEmpty(dto.PhoneNumber))
+                    user.PhoneNumber = dto.PhoneNumber;
                
 
                 _uow.Users.Update(user);

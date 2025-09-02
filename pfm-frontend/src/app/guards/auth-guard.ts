@@ -18,5 +18,10 @@ export const authGuard: CanActivateFn = (route, state) => {
     return router.createUrlTree(['/transactions']);
   }
 
+  if (route.routeConfig?.path?.startsWith('users') && !isAdmin) {
+    alert('You do not have permission to access this page.');
+    return router.createUrlTree(['/transactions']);
+  }
+
   return true;
 };

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
-import {PagedList, PagedListRaw, UserDto, UserDtoRaw} from '../model/model';
+import {PagedList, PagedListRaw, UpdateUserDto, UserDto, UserDtoRaw} from '../model/model';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +39,21 @@ export class UserService {
           sortBy: raw['sort-by']
         }))
       );
+  }
+
+  updateUser(id: string, user: UpdateUserDto): Observable<any> {
+    const body = {
+      'first-name': user.firstName,
+      'last-name': user.lastName,
+      'email': user.email,
+      'password': user.password,
+      'address': user.address,
+      'phone-number': user.phoneNumber
+    };
+    return this.http.put(`${this.apiUrl}/${id}`, body, {
+      headers: this.getHeaders(),
+      responseType: 'text'
+    });
   }
 
   private getHeaders() {
