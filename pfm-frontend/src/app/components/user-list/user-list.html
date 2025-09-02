@@ -1,0 +1,96 @@
+<div class="flex">
+  <app-sidebar></app-sidebar>
+  <div class="ml-40 sm:ml-56 md:ml-64 flex-1 min-h-screen bg-[#424042] py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-gradient-to-r from-[#4a3a6e] to-[#2a292a] rounded-lg shadow-lg mb-8 p-6 border border-[#3d3c3d]">
+        <h1 class="text-3xl font-bold text-white mb-2">Users</h1>
+        <p class="text-purple-200">Overview of all users</p>
+      </div>
+
+      @if (loading) {
+        <div class="bg-[#363536] rounded-lg shadow-sm p-8 text-center border border-[#2a292a]">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#7c5cf6] mx-auto mb-4"></div>
+          <p class="text-gray-300">Loading users...</p>
+        </div>
+      }
+
+      @if (error) {
+        <div class="bg-red-900/20 rounded-lg p-4 mb-6 border border-red-900/30">
+          <div class="flex items-center">
+            <svg class="w-5 h-5 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span class="text-red-300 font-medium">Failed to load users</span>
+          </div>
+        </div>
+      }
+
+      @if (!loading && !error) {
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-[#2a292a]">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-purple-300 uppercase tracking-wider">First Name</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-purple-300 uppercase tracking-wider">Last Name</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-purple-300 uppercase tracking-wider">Email</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-purple-300 uppercase tracking-wider">Address</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-purple-300 uppercase tracking-wider">Phone Number</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-purple-300 uppercase tracking-wider">Birthday</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-purple-300 uppercase tracking-wider">JMBG</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-purple-300 uppercase tracking-wider">Role</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-purple-300 uppercase tracking-wider">Update</th>
+            </tr>
+            </thead>
+            <tbody class="bg-[#2a292a] divide-y divide-gray-700">
+              @for (user of pagedUsers?.items || []; track user.id) {
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ user.firstName }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ user.lastName }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ user.email }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ user.address }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ user.phoneNumber }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ formatDate(user.birthday) }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ user.jmbg }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ user.role }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    <button (click)="updateUser(user.id)" class="px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700">Update</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        @if (pagedUsers && pagedUsers.totalPages > 1) {
+          <div class="flex justify-center mt-8">
+            <nav class="flex items-center space-x-2">
+              <button (click)="loadUsers((pagedUsers!.page - 1))" [disabled]="pagedUsers!.page <= 1"
+                      [ngClass]="{
+                  'bg-[#2a292a] text-gray-400 cursor-not-allowed': pagedUsers!.page <= 1,
+                  'bg-[#2a292a] text-white hover:bg-[#4a3a6e] border-[#2a292a]': pagedUsers!.page > 1
+                }"
+                      class="px-3 py-2 border rounded-lg text-sm font-medium transition-colors duration-200">
+                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+
+              <span class="px-4 py-2 text-sm text-white">Page {{ pagedUsers!.page }} of {{ pagedUsers!.totalPages }}</span>
+
+              <button (click)="loadUsers((pagedUsers!.page + 1))" [disabled]="pagedUsers!.page >= pagedUsers!.totalPages"
+                      [ngClass]="{
+                  'bg-[#2a292a] text-gray-400 cursor-not-allowed': pagedUsers!.page >= pagedUsers!.totalPages,
+                  'bg-[#2a292a] text-white hover:bg-[#4a3a6e] border-[#2a292a]': pagedUsers!.page < pagedUsers!.totalPages
+                }"
+                      class="px-3 py-2 border rounded-lg text-sm font-medium transition-colors duration-200">
+                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+            </nav>
+          </div>
+        }
+      }
+    </div>
+  </div>
+</div>

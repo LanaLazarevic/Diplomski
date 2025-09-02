@@ -4,6 +4,7 @@ import {NgClass} from '@angular/common';
 import {CardDto, PagedList} from '../../model/model';
 import {CardService} from '../../service/card-service';
 import {LoginService} from '../../service/login-service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-card-list',
@@ -16,7 +17,7 @@ export class CardList implements OnInit {
   loading = false;
   error = false;
 
-  constructor(private service: CardService, private loginService: LoginService) {
+  constructor(private service: CardService, private loginService: LoginService, private router: Router) {
   }
 
   ngOnInit() {
@@ -66,5 +67,9 @@ export class CardList implements OnInit {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     }).format(amount);
+  }
+
+  openNewCardForm() {
+    this.router.navigate(['/cards/new']);
   }
 }

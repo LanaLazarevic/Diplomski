@@ -48,7 +48,11 @@
             }
           </div>
         }
-
+        @if (isAdmin()) {
+          <div class="mb-6 text-right">
+            <button (click)="openNewCardForm()"  class="px-4 py-2 bg-[#4a3a6e] text-white rounded-lg hover:bg-[#5d4a85]">New Card</button>
+          </div>
+        }
         <div class="space-y-4">
           @for (card of pagedCards?.items || []; track card.id) {
             <div class="bg-[#2a292a] rounded-lg p-4 flex flex-col h-full border border-[#3d3c3d]">

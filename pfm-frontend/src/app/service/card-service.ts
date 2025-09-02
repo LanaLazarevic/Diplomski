@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
-import {CardDto, CardDtoRaw, PagedList, PagedListRaw} from '../model/model';
+import {CardDto, CardDtoRaw, CreateCardDto, PagedList, PagedListRaw} from '../model/model';
 
 @Injectable({
   providedIn: 'root'
@@ -60,5 +60,20 @@ export class CardService {
     return new HttpHeaders().set('Authorization', `Bearer ${jwt}`);
   }
 
+  createCard(card: CreateCardDto): Observable<any> {
+    const body = {
+      'owner-name': card.ownerName,
+      'card-number': card.cardNumber,
+      'expiration-date': card.expirationDate,
+      'available-amount': card.availableAmount,
+      'reserved-amount': card.reservedAmount,
+      'user-jmbg': card.userJmbg,
+      'card-type': card.cardType
+    };
+    return this.http.post(this.apiUrl, body, {
+      headers: this.getHeaders(),
+      responseType: 'text'
+    });
+  }
 
 }

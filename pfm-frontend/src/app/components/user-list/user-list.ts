@@ -1,0 +1,50 @@
+import {Component, OnInit} from '@angular/core';
+import {PagedList, UserDto} from '../../model/model';
+import {UserService} from '../../service/user-service';
+import {LoginService} from '../../service/login-service';
+import {Sidebar} from '../sidebar/sidebar';
+import {NgClass} from '@angular/common';
+
+@Component({
+  selector: 'app-user-list',
+  imports: [
+    Sidebar,
+    NgClass
+  ],
+  templateUrl: './user-list.html',
+  styleUrl: './user-list.css'
+})
+export class UserList implements OnInit {
+  pagedUsers: PagedList<UserDto> | null = null;
+  loading = false;
+  error = false;
+
+  constructor(private service: UserService, private loginService: LoginService) {}
+
+  ngOnInit() {
+    this.loadUsers();
+  }
+
+  loadUsers(page: number = 1) {
+    this.loading = true;
+    this.error = false;
+    this.service.getUsers(page).subscribe({
+      next: res => {
+        this.pagedUsers = res;
+        this.loading = false;
+      },
+      error: _ => {
+        this.error = true;
+        this.loading = false;
+      }
+    });
+  }
+
+  updateUser(id: string) {
+    console.log('Update user', id);
+  }
+
+  formatDate(date: string): string {
+    return new Date(date).toLocaleDateString();
+  }
+}

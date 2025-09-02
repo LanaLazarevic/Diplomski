@@ -132,3 +132,37 @@ export interface CardDtoRaw {
   'user-id': string;
   'is-active': boolean;
 }
+
+export interface CreateCardDto {
+  ownerName: string;
+  cardNumber: string;
+  expirationDate: string;
+  availableAmount: number;
+  reservedAmount: number;
+  userJmbg: string;
+  cardType: string;
+}
+
+export interface UserDto {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  address?: string;
+  phoneNumber?: string;
+  birthday: string;
+  jmbg: string;
+  role: string;
+}
+
+export interface UserDtoRaw {
+  id: string;
+  'first-name': string;
+  'last-name': string;
+  email: string;
+  address?: string;
+  'phone-number'?: string;
+  birthday: string;
+  jmbg: string;
+  role: string;
+}
