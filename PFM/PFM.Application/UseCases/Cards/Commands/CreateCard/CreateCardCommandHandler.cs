@@ -48,14 +48,14 @@ namespace PFM.Application.UseCases.Cards.Commands.CreateCard
             }
             try
             {
-                var user = await _uow.Users.GetByIdAsync(dto.UserId, cancellationToken);
+                var user = await _uow.Users.GetByJmbg(dto.UserJmbg, cancellationToken);
                 if (user == null)
                 {
                     var error = new BusinessError
                     {
-                        Problem = "user-id",
+                        Problem = "user-jmbg",
                         Message = "User not found",
-                        Details = $"User with id {dto.UserId} does not exist"
+                        Details = $"User with jmbg {dto.UserJmbg} does not exist"
                     };
                     return OperationResult.Fail(440, new[] { error });
                 }
@@ -70,7 +70,8 @@ namespace PFM.Application.UseCases.Cards.Commands.CreateCard
                     AvailableAmount = dto.AvailableAmount,
                     ReservedAmount = dto.ReservedAmount,
                     UserId = user.Id,
-                    CardType = cardType
+                    CardType = cardType,
+                    IsActive = true
                 };
 
                 _uow.Cards.Add(card);

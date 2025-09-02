@@ -20,5 +20,7 @@ namespace PFM.Domain.Interfaces
         void Update(User user);
 
         Task<List<User>> GetAllWithCardsAndTransactionsAsync(DateTime start, DateTime end, CancellationToken ct = default);
+
+        Task<User?> GetByJmbg(string jm, CancellationToken ct = default);
     }
 }

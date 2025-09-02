@@ -31,8 +31,11 @@ namespace PFM.Application.Validation
                 .GreaterThanOrEqualTo(0)
                 .WithMessage("reserved-amount:negative:reserved-amount must be greater or equal to 0");
 
-            RuleFor(x => x.UserId)
-                .NotEmpty().WithMessage("user-id:required:user-id is required");
+            RuleFor(x => x.UserJmbg)
+                .NotEmpty().WithMessage("user-jmbg:required:user-jmbg is required")
+                .Length(13).WithMessage("jmbg:invalid-length:jmbg must be 13 characters long");
+
+
 
             RuleFor(x => x.CardType)
                 .Must(t => Enum.TryParse<CardTypeEnum>(t, true, out _))

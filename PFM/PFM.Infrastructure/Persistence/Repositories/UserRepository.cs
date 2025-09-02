@@ -95,5 +95,10 @@ namespace PFM.Infrastructure.Persistence.Repositories
         {
             _ctx.Users.Update(user);
         }
+
+        public async Task<User?> GetByJmbg(string jm, CancellationToken ct = default)
+        {
+            return await _ctx.Users.SingleOrDefaultAsync(u => u.Jmbg == jm, ct);
+        }
     }
 }

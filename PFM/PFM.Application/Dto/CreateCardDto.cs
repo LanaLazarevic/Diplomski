@@ -25,8 +25,8 @@ namespace PFM.Application.Dto
         [JsonPropertyName("reserved-amount")]
         public double ReservedAmount { get; set; }
 
-        [JsonPropertyName("user-id")]
-        public Guid UserId { get; set; }
+        [JsonPropertyName("user-jmbg")]
+        public string UserJmbg { get; set; }
 
         [JsonPropertyName("card-type")]
         public string CardType { get; set; } = CardTypeEnum.debit.ToString();
