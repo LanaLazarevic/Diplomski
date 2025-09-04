@@ -20,10 +20,13 @@ namespace PFM.Application.Mapping
             CreateMap<Split, SplitItemDto>();
             CreateMap<Category, CategoryDto>();
             CreateMap<Card, CardDto>()
-                 .ForMember(dest => dest.CardType, opt => opt.MapFrom(src => src.CardType.ToString()));
+                 .ForMember(dest => dest.CardType, opt => opt.MapFrom(src => src.CardType.ToString()))
+                 .ForMember(dest => dest.AccountNumber, opt => opt.MapFrom(src => src.Account.AccountNumber));
             CreateMap<User, UserDto>()
                 .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.ToString()));
-
+            CreateMap<Account, AccountDto>()
+                .ForMember(dest => dest.AccountType, opt => opt.MapFrom(src => src.AccountType.ToString()))
+                .ForMember(dest => dest.UserFullName, opt => opt.MapFrom(src => src.User.FirstName + " " + src.User.LastName));
         }
     }
 }

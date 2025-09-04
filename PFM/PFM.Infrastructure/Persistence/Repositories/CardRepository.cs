@@ -32,13 +32,24 @@ namespace PFM.Infrastructure.Persistence.Repositories
         }
         public async Task<PagedList<Card>> GetCardsAsync(CardQuerySpecification spec, CancellationToken ct = default)
         {
-            var query = _context.Cards.AsQueryable();
+            var query = _context.Cards
+                .Include(c => c.Account)
+                .Include(c => c.User)
+                .AsQueryable();
             if (!string.IsNullOrWhiteSpace(spec.OwnerName))
             {
                 var lowered = spec.OwnerName.ToLower();
                 query = query.Where(c => c.OwnerName.ToLower().Contains(lowered));
             }
+            if (spec.AccountNumber.HasValue)
+            {
+                query = query.Where(c => c.Account.AccountNumber == spec.AccountNumber.Value);
+            }
 
+            if (!string.IsNullOrWhiteSpace(spec.Jmbg))
+            {
+                query = query.Where(c => c.User.Jmbg == spec.Jmbg);
+            }
             if (spec.UserId.HasValue)
             {
                 query = query.Where(c => c.UserId == spec.UserId.Value);

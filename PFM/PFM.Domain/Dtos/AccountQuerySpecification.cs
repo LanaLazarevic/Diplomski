@@ -6,28 +6,25 @@ using System.Threading.Tasks;
 
 namespace PFM.Domain.Dtos
 {
-    public class CardQuerySpecification
+    public class AccountQuerySpecification
     {
-        public string? OwnerName { get; }
+        public long? AccountNumber { get; }
+        public string? Jmbg { get; }
         public int Page { get; }
         public int PageSize { get; }
         public string SortBy { get; }
         public SortOrder SortOrder { get; }
         public Guid? UserId { get; }
-        public long? AccountNumber { get; }
-        public string? Jmbg { get; }
 
-
-        public CardQuerySpecification(string? ownerName, int page, int pageSize, string sortBy, SortOrder sortOrder, Guid? userId, long? accountNumber, string? jmbg)
+        public AccountQuerySpecification(long? accountNumber, string? jmbg, int page, int pageSize, string sortBy, SortOrder sortOrder, Guid? userId)
         {
-            OwnerName = ownerName;
-            Page = page <= 0 ? 1 : page;
-            PageSize = pageSize <= 0 ? 10 : pageSize;
-            SortBy = !string.IsNullOrWhiteSpace(sortBy) ? sortBy : "ownername";
-            SortOrder = sortOrder;
-            UserId = userId;
             AccountNumber = accountNumber;
             Jmbg = jmbg;
+            Page = page <= 0 ? 1 : page;
+            PageSize = pageSize <= 0 ? 10 : pageSize;
+            SortBy = !string.IsNullOrWhiteSpace(sortBy) ? sortBy : "accountnumber";
+            SortOrder = sortOrder;
+            UserId = userId;
         }
     }
 }

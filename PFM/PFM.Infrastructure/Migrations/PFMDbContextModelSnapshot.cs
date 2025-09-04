@@ -54,7 +54,7 @@ namespace PFM.Infrastructure.Migrations
 
                     b.Property<double>("ReservedAmount")
                         .HasColumnType("decimal(20,2)")
-                        .HasColumnName("reserved_samount");
+                        .HasColumnName("reserved_amount");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")

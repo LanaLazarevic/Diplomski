@@ -29,5 +29,8 @@ namespace PFM.Application.Dto
 
         [JsonPropertyName("is-active")]
         public bool IsActive { get; set; }
+
+        [JsonPropertyName("account-number")]
+        public long AccountNumber { get; set; }
     }
 }

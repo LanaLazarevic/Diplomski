@@ -24,7 +24,7 @@ namespace PFM.Infrastructure.Persistence.EntityTypeConfigurations
                 .IsRequired();
 
             builder.Property(a => a.ReservedAmount)
-                .HasColumnName("reserved_samount")
+                .HasColumnName("reserved_amount")
                 .HasColumnType("decimal(20,2)")
                 .IsRequired();
 

@@ -5,7 +5,7 @@
         ITransactionRepository Transactions { get; }
         ICategoryRepository Categories { get; }
         IUserRepository Users { get; }
-
+        IAccountRepository Accounts { get; }
         ICardRepository Cards { get; }
 
         Task SaveChangesAsync();

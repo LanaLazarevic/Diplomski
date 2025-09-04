@@ -7,15 +7,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace PFM.Application.UseCases.Cards.Queries.GetAll
+namespace PFM.Application.UseCases.Accounts.Queries.GetAll
 {
-    public class GetCardsQuery : IRequest<OperationResult<PagedList<CardDto>>>
+    public class GetAccountsQuery : IRequest<OperationResult<PagedList<AccountDto>>>
     {
-        [FromQuery(Name = "owner-name")]
-        public string? OwnerName { get; set; }
+        [FromQuery(Name = "account-number")]
+        public long? AccountNumber { get; set; }
+
+        [FromQuery(Name = "user-jmbg")]
+        public string? UserJmbg { get; set; }
 
         [FromQuery(Name = "page")]
         public int Page { get; set; } = 1;
@@ -24,20 +26,11 @@ namespace PFM.Application.UseCases.Cards.Queries.GetAll
         public int PageSize { get; set; } = 10;
 
         [FromQuery(Name = "sort-by")]
-        public string SortBy { get; set; } = "ownerName";
+        public string SortBy { get; set; } = "accountNumber";
 
         [FromQuery(Name = "sort-order")]
         public string SortOrder { get; set; } = "Asc";
 
-        [JsonIgnore]
         public Guid? UserId { get; set; }
-
-        [FromQuery(Name = "account-number")]
-        public long? AccountNumber { get; set; }
-
-        [FromQuery(Name = "user-jmbg")]
-        public string? UserJmbg { get; set; }
-
-
     }
 }
