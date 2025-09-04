@@ -1,0 +1,99 @@
+<div class="flex">
+  <app-sidebar></app-sidebar>
+  <div class="ml-40 sm:ml-56 md:ml-64 flex-1 min-h-screen bg-[#424042] py-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-gradient-to-r from-[#4a3a6e] to-[#2a292a] rounded-lg shadow-lg mb-8 p-6 border border-[#3d3c3d]">
+        <h1 class="text-3xl font-bold text-white mb-2">Accounts</h1>
+        <p class="text-purple-200">Overview of all accounts</p>
+      </div>
+
+      @if (loading) {
+        <div class="bg-[#363536] rounded-lg shadow-sm p-8 text-center border border-[#2a292a]">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#7c5cf6] mx-auto mb-4"></div>
+          <p class="text-gray-300">Loading accounts...</p>
+        </div>
+      }
+
+      @if (error) {
+        <div class="bg-red-900/20 rounded-lg p-4 mb-6 border border-red-900/30">
+          <div class="flex items-center">
+            <svg class="w-5 h-5 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-red-300 font-medium">Failed to load accounts</span>
+          </div>
+        </div>
+      }
+
+      @if (!loading && !error) {
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          @for (account of pagedAccounts?.items || []; track account.id) {
+            <div class="bg-[#2a292a] rounded-lg p-4 border border-[#3d3c3d] flex flex-col">
+              <div class="text-white font-semibold mb-2">Account {{account.accountNumber}}</div>
+              <div class="text-sm text-gray-400">User: {{account.userFullName}}</div>
+              <div class="text-sm text-gray-400">Type: {{account.accountType}}</div>
+              <div class="text-sm text-gray-400">Currency: {{account.currency}}</div>
+              <div class="text-sm text-gray-400">Available: {{formatAmount(account.availableAmount)}}</div>
+              <div class="text-sm text-gray-400">Reserved: {{formatAmount(account.reservedAmount)}}</div>
+              <div class="mt-auto pt-2 border-t border-[#3d3c3d] flex justify-end">
+                @if (isAdmin() && account.isActive) {
+                  <button (click)="deactivate(account.id)" class="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700">Deactivate</button>
+                } @else {
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium border bg-red-900 text-red-300 border-red-700">Inactive</span>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @if (pagedAccounts && pagedAccounts.totalPages > 1) {
+        <div class="flex justify-center mt-8">
+          <nav class="flex items-center space-x-2">
+            <!-- Previous Button -->
+            <button (click)="previousPage()"
+                    [disabled]="currentPage <= 1"
+                    [ngClass]="{
+                      'bg-[#2a292a] text-gray-400 cursor-not-allowed': currentPage <= 1,
+                      'bg-[#2a292a] text-white hover:bg-[#4a3a6e] border-[#2a292a]': currentPage > 1
+                    }"
+                    class="px-3 py-2 border rounded-lg text-sm font-medium transition-colors duration-200">
+              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+
+            <!-- Page Numbers -->
+            @for (page of getVisiblePages(); track page) {
+              @if (page === -1) {
+                <span class="px-3 py-2 text-gray-400">...</span>
+              } @else {
+                <button (click)="goToPage(page)"
+                        [ngClass]="{
+                          'bg-[#4a3a6e] text-white border-[#4a3a6e]': page === currentPage,
+                          'bg-[#2a292a] text-white hover:bg-[#4a3a6e] border-[#2a292a]': page !== currentPage
+                        }"
+                        class="px-4 py-2 border rounded-lg text-sm font-medium transition-colors duration-200">
+                  {{page}}
+                </button>
+              }
+            }
+
+            <!-- Next Button -->
+            <button (click)="nextPage()"
+                    [disabled]="pagedAccounts && currentPage >= pagedAccounts.totalPages"
+                    [ngClass]="{
+                      'bg-[#2a292a] text-gray-400 cursor-not-allowed': pagedAccounts && currentPage >= pagedAccounts.totalPages,
+                      'bg-[#2a292a] text-white hover:bg-[#4a3a6e] border-[#2a292a]': pagedAccounts && currentPage < pagedAccounts.totalPages
+                    }"
+                    class="px-3 py-2 border rounded-lg text-sm font-medium transition-colors duration-200">
+              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+          </nav>
+        </div>
+      }
+    </div>
+  </div>
+</div>

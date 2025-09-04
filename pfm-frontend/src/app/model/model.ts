@@ -187,3 +187,25 @@ export interface CreateUserDto {
   role: string;
   jmbg: string;
 }
+
+export interface AccountDto {
+  id: string;
+  accountNumber: number;
+  availableAmount: number;
+  reservedAmount: number;
+  currency: string;
+  accountType: string;
+  isActive: boolean;
+  userFullName: string;
+}
+
+export interface AccountDtoRaw {
+  id: string;
+  'account-number': number;
+  'available-amount': number;
+  'reserved-amount': number;
+  currency: string;
+  'account-type': string;
+  'is-active': boolean;
+  'user-full-name': string;
+}
