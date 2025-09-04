@@ -67,8 +67,6 @@ namespace PFM.Application.UseCases.Cards.Commands.CreateCard
                     OwnerName = dto.OwnerName,
                     CardNumber = dto.CardNumber,
                     ExpirationDate = dto.ExpirationDate,
-                    AvailableAmount = dto.AvailableAmount,
-                    ReservedAmount = dto.ReservedAmount,
                     UserId = user.Id,
                     CardType = cardType,
                     IsActive = true

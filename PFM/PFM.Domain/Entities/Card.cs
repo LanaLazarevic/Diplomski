@@ -17,17 +17,16 @@ namespace PFM.Domain.Entities
 
         public DateOnly ExpirationDate { get; set; }
 
-        public double AvailableAmount { get; set; }
-
-        public double ReservedAmount { get; set; }
-
         public CardTypeEnum CardType { get; set; }
 
         public bool IsActive { get; set; }
 
         public Guid UserId { get; set; }
+        public Guid AccountId { get; set; }
 
         public User User { get; set; }
+
+        public Account Account { get; set; }
 
         public List<Transaction>? Transactions { get; set; } = [];
     }

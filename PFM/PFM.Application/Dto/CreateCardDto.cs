@@ -19,12 +19,6 @@ namespace PFM.Application.Dto
         [JsonPropertyName("expiration-date")]
         public DateOnly ExpirationDate { get; set; }
 
-        [JsonPropertyName("available-amount")]
-        public double AvailableAmount { get; set; }
-
-        [JsonPropertyName("reserved-amount")]
-        public double ReservedAmount { get; set; }
-
         [JsonPropertyName("user-jmbg")]
         public string UserJmbg { get; set; }
 

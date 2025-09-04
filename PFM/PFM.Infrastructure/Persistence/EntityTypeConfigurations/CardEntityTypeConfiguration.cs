@@ -34,16 +34,6 @@ namespace PFM.Infrastructure.Persistence.EntityTypeConfigurations
                 .HasColumnType("date")
                 .IsRequired();
 
-            builder.Property(c => c.AvailableAmount)
-                .HasColumnName("available_amount")
-                .HasColumnType("decimal(20,2)")
-                .IsRequired();
-
-            builder.Property(c => c.ReservedAmount)
-                .HasColumnName("reserved_amount")
-                .HasColumnType("decimal(20,2)")
-                .IsRequired();
-
             builder.Property(c => c.IsActive)
                 .HasColumnName("is_active")
                 .IsRequired();
@@ -56,9 +46,17 @@ namespace PFM.Infrastructure.Persistence.EntityTypeConfigurations
                 .HasColumnName("card_type")
                 .IsRequired();
 
+            builder.Property(c => c.AccountId)
+                .HasColumnName("account_id");
+
             builder.HasOne(c => c.User)
                 .WithMany(u => u.Cards)
                 .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(c => c.Account)
+                .WithMany(a => a.Cards)
+                .HasForeignKey(c => c.AccountId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

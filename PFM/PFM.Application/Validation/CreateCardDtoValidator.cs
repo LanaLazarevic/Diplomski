@@ -23,14 +23,6 @@ namespace PFM.Application.Validation
                 .Must(d => d > DateOnly.Parse(DateTime.UtcNow.ToShortDateString().ToString()))
                 .WithMessage("expiration-date:invalid-value:expiration-date must be in the future");
 
-            RuleFor(x => x.AvailableAmount)
-                .GreaterThanOrEqualTo(0)
-                .WithMessage("available-amount:negative:available-amount must be greater or equal to 0");
-
-            RuleFor(x => x.ReservedAmount)
-                .GreaterThanOrEqualTo(0)
-                .WithMessage("reserved-amount:negative:reserved-amount must be greater or equal to 0");
-
             RuleFor(x => x.UserJmbg)
                 .NotEmpty().WithMessage("user-jmbg:required:user-jmbg is required")
                 .Length(13).WithMessage("jmbg:invalid-length:jmbg must be 13 characters long");
