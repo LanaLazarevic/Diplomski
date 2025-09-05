@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
-import {AccountDto, AccountDtoRaw, PagedList, PagedListRaw} from '../model/model';
+import {AccountDto, AccountDtoRaw, CreateAccountDto, PagedList, PagedListRaw} from '../model/model';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +39,21 @@ export class AccountService {
 
   deactivateAccount(id: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}/deactivate`, {}, {
+      headers: this.getHeaders(),
+      responseType: 'text'
+    });
+  }
+
+  createAccount(account: CreateAccountDto): Observable<any> {
+    const body = {
+      'account-number': account.accountNumber,
+      'available-amount': account.availableAmount,
+      'reserved-amount': account.reservedAmount,
+      'currency': account.currency,
+      'user-jmbg': account.userJmbg,
+      'account-type': account.accountType
+    };
+    return this.http.post(this.apiUrl, body, {
       headers: this.getHeaders(),
       responseType: 'text'
     });

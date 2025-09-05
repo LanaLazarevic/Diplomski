@@ -4,6 +4,7 @@ import {AccountService} from '../../service/account-service';
 import {LoginService} from '../../service/login-service';
 import {Sidebar} from '../sidebar/sidebar';
 import {NgClass} from '@angular/common';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-account-list',
@@ -19,7 +20,7 @@ export class AccountList implements OnInit {
   loading = false;
   error = false;
   currentPage = 1;
-  constructor(private service: AccountService, private loginService: LoginService) {}
+  constructor(private service: AccountService, private loginService: LoginService, private router: Router) {}
 
   ngOnInit() {
     this.loadAccounts();
@@ -108,6 +109,10 @@ export class AccountList implements OnInit {
     }
 
     return pages;
+  }
+
+  openCreateAccountForm() {
+    this.router.navigate(['/accounts/create']);
   }
 
   formatAmount(amount: number): string {

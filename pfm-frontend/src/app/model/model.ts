@@ -209,3 +209,12 @@ export interface AccountDtoRaw {
   'is-active': boolean;
   'user-full-name': string;
 }
+
+export interface CreateAccountDto {
+  accountNumber: number;
+  availableAmount: number;
+  reservedAmount: number;
+  currency: string;
+  userJmbg: string;
+  accountType: string;
+}

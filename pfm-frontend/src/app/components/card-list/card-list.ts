@@ -16,6 +16,7 @@ export class CardList implements OnInit {
   pagedCards: PagedList<CardDto> | null = null;
   loading = false;
   error = false;
+  currentPage = 1;
 
   constructor(private service: CardService, private loginService: LoginService, private router: Router) {
   }
@@ -71,5 +72,64 @@ export class CardList implements OnInit {
 
   openNewCardForm() {
     this.router.navigate(['/cards/new']);
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.loadCards(this.currentPage - 1);
+      this.currentPage -= 1;
+    }
+  }
+
+  nextPage() {
+    if (this.pagedCards && this.currentPage < this.pagedCards.totalPages) {
+      this.loadCards(this.currentPage + 1);
+      this.currentPage += 1;
+    }
+  }
+
+  goToPage(page: number) {
+    if (page !== this.currentPage && this.pagedCards && page >= 1 && page <= this.pagedCards.totalPages) {
+      this.loadCards(page);
+      this.currentPage = page;
+    }
+  }
+
+  getVisiblePages(): number[] {
+    if (!this.pagedCards) return [];
+
+    const totalPages = this.pagedCards.totalPages;
+    const current = this.currentPage;
+    const pages: number[] = [];
+
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      pages.push(1);
+
+      if (current <= 4) {
+        for (let i = 2; i <= 5; i++) {
+          pages.push(i);
+        }
+        pages.push(-1);
+        pages.push(totalPages);
+      } else if (current >= totalPages - 3) {
+        pages.push(-1);
+        for (let i = totalPages - 4; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(-1);
+        for (let i = current - 1; i <= current + 1; i++) {
+          pages.push(i);
+        }
+        pages.push(-1);
+        pages.push(totalPages);
+      }
+    }
+
+    return pages;
   }
 }

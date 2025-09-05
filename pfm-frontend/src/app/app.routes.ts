@@ -8,6 +8,7 @@ import {UserList} from './components/user-list/user-list';
 import {UpdateUser} from './components/update-user/update-user';
 import {CreateUser} from './components/create-user/create-user';
 import {AccountList} from './components/account-list/account-list';
+import {NewAccount} from './components/new-account/new-account';
 
 export const routes: Routes =  [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -19,4 +20,5 @@ export const routes: Routes =  [
   { path: 'users/create', component: CreateUser, canActivate:[authGuard] },
   { path: 'users/update/:id', component: UpdateUser, canActivate:[authGuard] },
   { path: 'accounts', component: AccountList, canActivate:[authGuard] },
+  { path: 'accounts/create', component: NewAccount, canActivate:[authGuard] }
 ];
