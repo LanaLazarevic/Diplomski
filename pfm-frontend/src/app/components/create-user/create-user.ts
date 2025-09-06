@@ -4,12 +4,16 @@ import {UserService} from '../../service/user-service';
 import {Router} from '@angular/router';
 import {FormsModule, NgForm} from '@angular/forms';
 import {Sidebar} from '../sidebar/sidebar';
+import {SidebarService} from '../../service/sidebar-service';
+import {AsyncPipe, NgClass} from '@angular/common';
 
 @Component({
   selector: 'app-create-user',
   imports: [
     Sidebar,
-    FormsModule
+    FormsModule,
+    AsyncPipe,
+    NgClass
   ],
   templateUrl: './create-user.html',
   styleUrl: './create-user.css'
@@ -29,7 +33,7 @@ export class CreateUser {
   maxDate: string;
   error: string | null = null;
 
-  constructor(private service: UserService, private router: Router) {
+  constructor(private service: UserService, private router: Router, public sidebarService: SidebarService) {
     const today = new Date();
     today.setFullYear(today.getFullYear() - 18);
     this.maxDate = today.toISOString().split('T')[0];

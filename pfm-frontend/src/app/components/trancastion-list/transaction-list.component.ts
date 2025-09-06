@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {CategoryDto, FilterParams, PagedList, SpendingAnalyticsItem, Split, TransactionDto} from '../../model/model';
 import {TransactionService} from '../../service/transaction-service';
-import {NgClass} from '@angular/common';
+import {AsyncPipe, NgClass} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {CategoryService} from '../../service/category-service';
 import {Sidebar} from '../sidebar/sidebar';
@@ -9,6 +9,7 @@ import {LoginService} from '../../service/login-service';
 import {Chart, registerables, ChartEvent, ActiveElement} from 'chart.js';
 import {AnalyticsService} from '../../service/analytics-service';
 import {initFlowbite} from 'flowbite';
+import {SidebarService} from '../../service/sidebar-service';
 
 Chart.register(...registerables);
 
@@ -17,7 +18,8 @@ Chart.register(...registerables);
   imports: [
     NgClass,
     FormsModule,
-    Sidebar
+    Sidebar,
+    AsyncPipe
   ],
   templateUrl: './transaction-list.component.html',
   styleUrl: './transaction-list.component.css'
@@ -51,7 +53,7 @@ export class TransactionList implements OnInit{
     'sort-order': 'Desc'
   };
 
-  constructor(private service: TransactionService, private categoryService: CategoryService, private loginService: LoginService, private analyticsService: AnalyticsService) {}
+  constructor(private service: TransactionService, private categoryService: CategoryService, private loginService: LoginService, private analyticsService: AnalyticsService, public sidebarService: SidebarService) {}
 
   ngOnInit() {
     this.loadTransactions();

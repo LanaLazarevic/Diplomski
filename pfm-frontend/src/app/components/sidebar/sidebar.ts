@@ -1,17 +1,30 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import {LoginService} from '../../service/login-service';
+import {SidebarService} from '../../service/sidebar-service';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-sidebar',
   imports: [
-    RouterLink
+    RouterLink,
+    AsyncPipe
   ],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css'
 })
-export class Sidebar {
-  constructor(public loginService: LoginService, private router: Router) {}
+export class Sidebar implements OnInit {
+  constructor(
+    public loginService: LoginService,
+    private router: Router,
+    public sidebarService: SidebarService
+  ) {}
+
+  ngOnInit() {
+    if (window.innerWidth >= 768) {
+      this.sidebarService.open();
+    }
+  }
 
   isAdmin(){
     return this.loginService.isAdmin();
@@ -28,6 +41,10 @@ export class Sidebar {
   logout(): void {
     this.loginService.clearAuthData();
     this.router.navigate(['/login']);
+  }
+
+  toggleSidebar(): void {
+    this.sidebarService.toggle();
   }
 
 }

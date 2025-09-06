@@ -4,12 +4,16 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user-service';
 import {FormsModule, NgForm} from '@angular/forms';
 import {Sidebar} from '../sidebar/sidebar';
+import {SidebarService} from '../../service/sidebar-service';
+import {AsyncPipe, NgClass} from '@angular/common';
 
 @Component({
   selector: 'app-update-user',
   imports: [
     Sidebar,
-    FormsModule
+    FormsModule,
+    AsyncPipe,
+    NgClass
   ],
   templateUrl: './update-user.html',
   styleUrl: './update-user.css'
@@ -26,7 +30,7 @@ export class UpdateUser implements OnInit {
   };
   error: string | null = null;
 
-  constructor(private route: ActivatedRoute, private service: UserService, private router: Router) {
+  constructor(private route: ActivatedRoute, private service: UserService, private router: Router, public sidebarService: SidebarService) {
     const navigation = this.router.getCurrentNavigation();
     const stateUser = navigation?.extras.state?.['user'] as UserDto | undefined;
     if (stateUser) {

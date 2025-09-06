@@ -3,12 +3,16 @@ import {CardService} from '../../service/card-service';
 import {Router} from '@angular/router';
 import {FormsModule, NgForm} from '@angular/forms';
 import {Sidebar} from '../sidebar/sidebar';
+import {SidebarService} from '../../service/sidebar-service';
+import {AsyncPipe, NgClass} from '@angular/common';
 
 @Component({
   selector: 'app-new-card',
   imports: [
     Sidebar,
-    FormsModule
+    FormsModule,
+    AsyncPipe,
+    NgClass
   ],
   templateUrl: './new-card.html',
   styleUrl: './new-card.css'
@@ -25,7 +29,7 @@ export class NewCard {
     cardType: 'debit'
   };
 
-  constructor(private service: CardService, private router: Router) {}
+  constructor(private service: CardService, private router: Router, public sidebarService: SidebarService) {}
 
   onSubmit(form: NgForm) {
     if (form.invalid) {

@@ -1,15 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {Sidebar} from '../sidebar/sidebar';
-import {NgClass} from '@angular/common';
+import {AsyncPipe, NgClass} from '@angular/common';
 import {CardDto, PagedList} from '../../model/model';
 import {CardService} from '../../service/card-service';
 import {LoginService} from '../../service/login-service';
 import {Router} from '@angular/router';
 import {FormsModule} from '@angular/forms';
+import {SidebarService} from '../../service/sidebar-service';
 
 @Component({
   selector: 'app-card-list',
-  imports: [Sidebar, NgClass, FormsModule],
+  imports: [Sidebar, NgClass, FormsModule, AsyncPipe],
   templateUrl: './card-list.html',
   styleUrl: './card-list.css'
 })
@@ -21,7 +22,7 @@ export class CardList implements OnInit {
   currentPage = 1;
   filterJmbg = '';
 
-  constructor(private service: CardService, private loginService: LoginService, private router: Router) {
+  constructor(private service: CardService, private loginService: LoginService, private router: Router, public sidebarService: SidebarService) {
   }
 
   ngOnInit() {

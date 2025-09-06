@@ -3,12 +3,16 @@ import {AccountService} from '../../service/account-service';
 import {Router} from '@angular/router';
 import {FormsModule, NgForm} from '@angular/forms';
 import {Sidebar} from '../sidebar/sidebar';
+import {SidebarService} from '../../service/sidebar-service';
+import {AsyncPipe, NgClass} from '@angular/common';
 
 @Component({
   selector: 'app-new-account',
   imports: [
     Sidebar,
-    FormsModule
+    FormsModule,
+    AsyncPipe,
+    NgClass
   ],
   templateUrl: './new-account.html',
   styleUrl: './new-account.css'
@@ -23,7 +27,7 @@ export class NewAccount {
     accountType: 'checking'
   };
 
-  constructor(private service: AccountService, private router: Router) {}
+  constructor(private service: AccountService, private router: Router, public sidebarService: SidebarService) {}
 
   onSubmit(form: NgForm) {
     if (form.invalid) {

@@ -3,6 +3,7 @@ import {FormsModule} from '@angular/forms';
 import {LoginService} from '../../service/login-service';
 import {BusinessError} from '../../model/model';
 import {Router} from '@angular/router';
+import {SidebarService} from '../../service/sidebar-service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ export class Login {
   password = '';
   error: BusinessError | null = null;
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private loginService: LoginService, private router: Router, public sidebarService: SidebarService) {}
 
   onSubmit() {
     this.error = null;

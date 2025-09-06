@@ -3,14 +3,16 @@ import {AccountDto, PagedList} from '../../model/model';
 import {AccountService} from '../../service/account-service';
 import {LoginService} from '../../service/login-service';
 import {Sidebar} from '../sidebar/sidebar';
-import {NgClass} from '@angular/common';
+import {AsyncPipe, NgClass} from '@angular/common';
 import {Router} from '@angular/router';
+import {SidebarService} from '../../service/sidebar-service';
 
 @Component({
   selector: 'app-account-list',
   imports: [
     Sidebar,
-    NgClass
+    NgClass,
+    AsyncPipe
   ],
   templateUrl: './account-list.html',
   styleUrl: './account-list.css'
@@ -20,7 +22,7 @@ export class AccountList implements OnInit {
   loading = false;
   error = false;
   currentPage = 1;
-  constructor(private service: AccountService, private loginService: LoginService, private router: Router) {}
+  constructor(private service: AccountService, private loginService: LoginService, private router: Router, public sidebarService: SidebarService) {}
 
   ngOnInit() {
     this.loadAccounts();

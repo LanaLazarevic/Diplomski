@@ -1,5 +1,19 @@
-<aside class="fixed inset-y-0 left-0 w-40 sm:w-56 md:w-64 bg-gray-800 text-white flex flex-col">
-  <nav class="flex-1 p-4 pt-12">
+@if (!(sidebarService.isOpen$ | async)){
+  <div class="fixed inset-y-0 left-0 z-50 w-4 bg-gray-800 flex items-center justify-center md:hidden">
+    <button (click)="toggleSidebar()" aria-label="Open sidebar">
+      <svg class="w-3 h-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  </div>
+}
+<aside [class.-translate-x-full]="!(sidebarService.isOpen$ | async)" class="fixed inset-y-0 left-0 z-40 w-48 sm:w-64 md:w-72 bg-gray-800 text-white flex flex-col transform transition-transform duration-300 md:translate-x-0">  <!-- Close button for mobile -->
+  <button (click)="toggleSidebar()" class="absolute top-4 -right-4 w-4 h-8 bg-gray-800 text-white rounded-r flex items-center justify-center md:hidden" aria-label="Close sidebar">
+    <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+  </button>
+  <nav class="flex-1 p-4 pt-8">
     <ul class="space-y-2">
       <li>
         <a [routerLink]="'/transactions'" class="flex items-center gap-3 py-2 px-4 rounded hover:bg-gray-700">

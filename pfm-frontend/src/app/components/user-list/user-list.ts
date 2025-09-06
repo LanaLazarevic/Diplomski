@@ -3,14 +3,16 @@ import {PagedList, UserDto} from '../../model/model';
 import {UserService} from '../../service/user-service';
 import {LoginService} from '../../service/login-service';
 import {Sidebar} from '../sidebar/sidebar';
-import {NgClass} from '@angular/common';
+import {AsyncPipe, NgClass} from '@angular/common';
 import {Router} from '@angular/router';
+import {SidebarService} from '../../service/sidebar-service';
 
 @Component({
   selector: 'app-user-list',
   imports: [
     Sidebar,
-    NgClass
+    NgClass,
+    AsyncPipe
   ],
   templateUrl: './user-list.html',
   styleUrl: './user-list.css'
@@ -20,7 +22,7 @@ export class UserList implements OnInit {
   loading = false;
   error = false;
 
-  constructor(private service: UserService, private loginService: LoginService, private router: Router) {}
+  constructor(private service: UserService, private loginService: LoginService, private router: Router, public sidebarService: SidebarService) {}
 
   ngOnInit() {
     this.loadUsers();
