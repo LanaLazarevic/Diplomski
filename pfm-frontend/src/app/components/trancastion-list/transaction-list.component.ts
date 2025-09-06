@@ -45,6 +45,8 @@ export class TransactionList implements OnInit{
   selectedCatcode: string | null = null;
   startDate: string | null = null;
   endDate: string | null = null;
+  chartColors: string[] = ['#3b82f6','#ec4899','#8b5cf6','#10b981','#f59e0b','#ef4444','#6366f1','#22c55e','#eab308','#f97316','#eb345e', '#34ebdb', '#c3eb34', '#8934eb'];
+  displayColors: string[] = [];
   @ViewChild('analyticsCanvas') analyticsCanvas!: ElementRef<HTMLCanvasElement>;
   private analyticsChart: Chart | null = null;
   filterParams: FilterParams = {
@@ -416,7 +418,7 @@ export class TransactionList implements OnInit{
     this.loadAnalytics();
   }
 
-  private loadAnalytics(catcode?: string) {
+  protected loadAnalytics(catcode?: string) {
     this.analyticsService.getSpendingAnalytics(catcode, this.startDate, this.endDate).subscribe({
       next: data => {
         this.analyticsData = data;
@@ -448,38 +450,21 @@ export class TransactionList implements OnInit{
     if (!this.analyticsCanvas) return;
     const labels = this.analyticsData.map(a => this.getCategoryName(a.catcode) || a.name);
     const data = this.analyticsData.map(a => a.percentage);
-    const colors = ['#3b82f6','#ec4899','#8b5cf6','#10b981','#f59e0b','#ef4444','#6366f1','#22c55e','#eab308','#f97316'];
+    const colors = Array.from({ length: data.length }, (_, idx) => this.chartColors[idx % this.chartColors.length]);
+    this.displayColors = colors;
     if (this.analyticsChart) {
       this.analyticsChart.destroy();
     }
-    const isDark = document.documentElement.classList.contains('dark');
-    const textColor = isDark ? '#fff' : '#374151';
     this.analyticsChart = new Chart(this.analyticsCanvas.nativeElement, {
       type: 'pie',
       data: {
         labels,
-        datasets: [{ data, backgroundColor: colors.slice(0, data.length) }]
+        datasets: [{ data, backgroundColor: colors }]
       },
       options: {
         maintainAspectRatio: false,
         plugins: {
-          legend: {
-            position: 'bottom',
-            labels: {
-              color: textColor,
-              font: {
-                size: 14,
-                weight: 'bold'
-              }
-            },
-            onClick: (_e: ChartEvent, legendItem: any) => {
-              const idx = legendItem.index;
-              if (idx !== undefined) {
-                const cat = this.analyticsData[idx].catcode;
-                this.loadAnalytics(cat);
-              }
-            }
-          }
+          legend: { display: false }
         },
         onClick: (_evt: ChartEvent, elements: ActiveElement[]) => {
           if (elements.length) {

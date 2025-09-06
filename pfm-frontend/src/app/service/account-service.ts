@@ -13,6 +13,7 @@ export class AccountService {
 
   getAccounts(page: number = 1): Observable<PagedList<AccountDto>> {
     const params = new HttpParams().set('page', page.toString());
+    params.set('page-size', 9);
     return this.http
       .get<PagedListRaw<AccountDtoRaw>>(this.apiUrl, { params, headers: this.getHeaders() })
       .pipe(

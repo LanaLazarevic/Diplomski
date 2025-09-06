@@ -45,12 +45,6 @@ export class LoginService {
     if (role) {
       this.setUserRole(role);
     }
-    if (email) {
-      sessionStorage.setItem('email', email);
-    }
-    if (userId) {
-      sessionStorage.setItem('userId', userId);
-    }
     if (fullName) {
       sessionStorage.setItem('fullName', fullName);
     }
