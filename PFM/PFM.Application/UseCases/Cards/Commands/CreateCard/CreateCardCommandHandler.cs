@@ -60,6 +60,18 @@ namespace PFM.Application.UseCases.Cards.Commands.CreateCard
                     return OperationResult.Fail(440, new[] { error });
                 }
 
+                var account = await _uow.Accounts.GetByNumber(dto.AccountNumber, cancellationToken);
+                if (account == null || account.UserId != user.Id)
+                {
+                    var error = new BusinessError
+                    {
+                        Problem = "account-number",
+                        Message = "Account not found or does not belong to user",
+                        Details = $"Account with number {dto.AccountNumber} does not exist or does not belong to user with jmbg {dto.UserJmbg}"
+                    };
+                    return OperationResult.Fail(440, new[] { error });
+                }
+
                 var cardType = Enum.Parse<CardTypeEnum>(dto.CardType, true);
                 var card = new Card
                 {
@@ -69,7 +81,8 @@ namespace PFM.Application.UseCases.Cards.Commands.CreateCard
                     ExpirationDate = dto.ExpirationDate,
                     UserId = user.Id,
                     CardType = cardType,
-                    IsActive = true
+                    IsActive = true,
+                    AccountId = account.Id
                 };
 
                 _uow.Cards.Add(card);

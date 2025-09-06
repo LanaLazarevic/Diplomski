@@ -87,5 +87,10 @@ namespace PFM.Infrastructure.Persistence.Repositories
                 TotalPages = (int)Math.Ceiling((double)totalCount / spec.PageSize)
             };
         }
+
+        public async Task<Account?> GetByNumber(long accountNumber, CancellationToken ct = default)
+        {
+            return await _ctx.Accounts.FirstOrDefaultAsync(a => a.AccountNumber == accountNumber, ct);
+        }
     }
 }

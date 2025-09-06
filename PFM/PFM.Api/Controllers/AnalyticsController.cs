@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PFM.Application.Result;
 using PFM.Application.UseCases.Analytics.Queries.GetSpendingAnalytics;
+using PFM.Domain.Enums;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Security.Claims;
 
 namespace PFM.Api.Controllers
 {
@@ -48,6 +50,15 @@ namespace PFM.Api.Controllers
                     }) ?? [])
                     .ToList();
                 return BadRequest(new { errors = modelErrors });
+            }
+
+            if (!User.IsInRole(nameof(RoleEnum.admin)))
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (Guid.TryParse(userIdClaim, out var userId))
+                {
+                    request.UserId = userId;
+                }
             }
 
             var op = await _mediator.Send(request);

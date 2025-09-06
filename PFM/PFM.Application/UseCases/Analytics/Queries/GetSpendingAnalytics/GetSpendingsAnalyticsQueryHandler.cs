@@ -75,7 +75,7 @@ namespace PFM.Application.UseCases.Analytics.Queries.GetSpendingAnalytics
                         ? DateTime.SpecifyKind(request.EndDate.Value, DateTimeKind.Utc)
                         : (DateTime?)null;
 
-            var spec = new AnalyticsTransactionQuerySpecification(startUtc, endUtc, directionEnum);
+            var spec = new AnalyticsTransactionQuerySpecification(startUtc, endUtc, directionEnum, request.UserId);
 
             var txs = await _uow.Transactions.GetForAnalyticsAsync(spec, cancellationToken);
 

@@ -151,6 +151,9 @@ namespace PFM.Infrastructure.Persistence.Repositories
             if (spec.Direction.HasValue)
                 q = q.Where(t => t.Direction == spec.Direction);
 
+            if (spec.UserId.HasValue)
+                q = q.Where(t => t.Card.UserId == spec.UserId);
+
             return await q.ToListAsync(ct);
         }
 

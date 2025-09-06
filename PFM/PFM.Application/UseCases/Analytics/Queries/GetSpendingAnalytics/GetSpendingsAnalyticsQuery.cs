@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace PFM.Application.UseCases.Analytics.Queries.GetSpendingAnalytics
@@ -25,5 +26,7 @@ namespace PFM.Application.UseCases.Analytics.Queries.GetSpendingAnalytics
         [FromQuery(Name = "direction")]
         public string? Direction { get; set; }
 
+        [JsonIgnore]
+        public Guid? UserId { get; set; }
     }
 }

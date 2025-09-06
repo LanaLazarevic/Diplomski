@@ -12,15 +12,19 @@ namespace PFM.Domain.Dtos
         public DateTime? StartDate { get; }
         public DateTime? EndDate { get; }
         public DirectionEnum? Direction { get; }
+        public Guid? UserId { get; }
+
 
         public AnalyticsTransactionQuerySpecification(
             DateTime? startDate,
             DateTime? endDate,
-            DirectionEnum? direction)
+            DirectionEnum? direction,
+            Guid? userId)
         {
             StartDate = startDate;
             EndDate = endDate;
             Direction = direction;
+            UserId = userId;
         }
     }
 }

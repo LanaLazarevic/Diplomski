@@ -22,6 +22,9 @@ namespace PFM.Application.Dto
         [JsonPropertyName("user-jmbg")]
         public string UserJmbg { get; set; }
 
+        [JsonPropertyName("account-number")]
+        public long AccountNumber { get; set; }
+
         [JsonPropertyName("card-type")]
         public string CardType { get; set; } = CardTypeEnum.debit.ToString();
     }

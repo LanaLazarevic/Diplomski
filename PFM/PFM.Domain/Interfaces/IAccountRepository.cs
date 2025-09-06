@@ -13,6 +13,7 @@ namespace PFM.Domain.Interfaces
         void Add(Account account);
         void Update(Account account);
         Task<Account?> GetByIdAsync(Guid id, CancellationToken ct = default);
+        Task<Account?> GetByNumber(long accountNumber, CancellationToken ct = default);
         Task<PagedList<Account>> GetAccountsAsync(AccountQuerySpecification spec, CancellationToken ct = default);
     }
 }

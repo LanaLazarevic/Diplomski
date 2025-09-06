@@ -47,12 +47,8 @@ namespace PFM.Application.UseCases.Transaction.Commands.SplitTransaction
             }
 
 
-            var tx = await _uow.Transactions.GetForAnalyticsAsync(
-                         new AnalyticsTransactionQuerySpecification(
-                             null, null, null), cancellationToken)
-                      .ContinueWith(t => t.Result
-                         .FirstOrDefault(x => x.Id == request.TransactionId),
-                         cancellationToken);
+            var tx = await _uow.Transactions.GetByIdAsync(request.TransactionId, cancellationToken);
+
             if (tx == null)
             {
                 BusinessError error = new BusinessError
