@@ -121,4 +121,9 @@ export class AccountList implements OnInit {
       maximumFractionDigits: 2
     }).format(amount);
   }
+
+  getReservedPercent(account: AccountDto): number {
+    const total = account.availableAmount + account.reservedAmount;
+    return total ? Math.round((account.reservedAmount / total) * 100) : 0;
+  }
 }

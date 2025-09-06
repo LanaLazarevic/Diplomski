@@ -14,6 +14,7 @@ import {Router} from '@angular/router';
 })
 export class CardList implements OnInit {
   pagedCards: PagedList<CardDto> | null = null;
+  groupedCards: { userId: string; ownerName: string; cards: CardDto[] }[] = [];
   loading = false;
   error = false;
   currentPage = 1;
@@ -31,6 +32,7 @@ export class CardList implements OnInit {
     this.service.getCards(page).subscribe({
       next: res => {
         this.pagedCards = res;
+        this.groupCards();
         this.loading = false;
       },
       error: _ => {
@@ -131,5 +133,32 @@ export class CardList implements OnInit {
     }
 
     return pages;
+  }
+
+  formatAccountNumber(num: string | number): string {
+    const digits = String(num).replace(/\D/g, '');
+    return digits.replace(/(\d{3})(?=\d)/g, '$1 ');
+  }
+
+  private groupCards() {
+    if (!this.pagedCards) {
+      this.groupedCards = [];
+      return;
+    }
+
+    const map = new Map<string, { userId: string; ownerName: string; cards: CardDto[] }>();
+    for (const card of this.pagedCards.items) {
+      const group = map.get(card.userId);
+      if (group) {
+        group.cards.push(card);
+      } else {
+        map.set(card.userId, {
+          userId: card.userId,
+          ownerName: card.ownerName,
+          cards: [card]
+        });
+      }
+    }
+    this.groupedCards = Array.from(map.values());
   }
 }

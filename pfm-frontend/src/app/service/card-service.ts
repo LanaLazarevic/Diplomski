@@ -34,6 +34,7 @@ export class CardService {
             expirationDate: r['expiration-date'],
             availableAmount: r['available-amount'],
             reservedAmount: r['reserved-amount'],
+            accountNumber: r['account-number'],
             cardType: r['card-type'],
             userId: r['user-id'],
             isActive: r['is-active']

@@ -115,6 +115,7 @@ export interface CardDto {
   cardNumber: string;
   expirationDate: string;
   availableAmount: number;
+  accountNumber: number;
   reservedAmount: number;
   cardType: string;
   userId: string;
@@ -126,6 +127,7 @@ export interface CardDtoRaw {
   'owner-name': string;
   'card-number': string;
   'expiration-date': string;
+  'account-number': number;
   'available-amount': number;
   'reserved-amount': number;
   'card-type': string;
