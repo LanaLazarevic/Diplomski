@@ -3,7 +3,7 @@ import {AccountDto, PagedList} from '../../model/model';
 import {AccountService} from '../../service/account-service';
 import {LoginService} from '../../service/login-service';
 import {Sidebar} from '../sidebar/sidebar';
-import {AsyncPipe, NgClass} from '@angular/common';
+import { NgClass} from '@angular/common';
 import {Router} from '@angular/router';
 import {SidebarService} from '../../service/sidebar-service';
 
@@ -12,7 +12,7 @@ import {SidebarService} from '../../service/sidebar-service';
   imports: [
     Sidebar,
     NgClass,
-    AsyncPipe
+
   ],
   templateUrl: './account-list.html',
   styleUrl: './account-list.css'

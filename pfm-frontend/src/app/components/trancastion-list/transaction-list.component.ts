@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {CategoryDto, FilterParams, PagedList, SpendingAnalyticsItem, Split, TransactionDto} from '../../model/model';
 import {TransactionService} from '../../service/transaction-service';
-import {AsyncPipe, NgClass} from '@angular/common';
+import { NgClass} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {CategoryService} from '../../service/category-service';
 import {Sidebar} from '../sidebar/sidebar';
@@ -19,7 +19,6 @@ Chart.register(...registerables);
     NgClass,
     FormsModule,
     Sidebar,
-    AsyncPipe
   ],
   templateUrl: './transaction-list.component.html',
   styleUrl: './transaction-list.component.css'

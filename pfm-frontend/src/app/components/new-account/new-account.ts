@@ -4,15 +4,12 @@ import {Router} from '@angular/router';
 import {FormsModule, NgForm} from '@angular/forms';
 import {Sidebar} from '../sidebar/sidebar';
 import {SidebarService} from '../../service/sidebar-service';
-import {AsyncPipe, NgClass} from '@angular/common';
 
 @Component({
   selector: 'app-new-account',
   imports: [
     Sidebar,
     FormsModule,
-    AsyncPipe,
-    NgClass
   ],
   templateUrl: './new-account.html',
   styleUrl: './new-account.css'

@@ -11,8 +11,6 @@ import {AsyncPipe, NgClass} from '@angular/common';
   imports: [
     Sidebar,
     FormsModule,
-    AsyncPipe,
-    NgClass
   ],
   templateUrl: './new-card.html',
   styleUrl: './new-card.css'

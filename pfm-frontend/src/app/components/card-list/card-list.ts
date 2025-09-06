@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Sidebar} from '../sidebar/sidebar';
-import {AsyncPipe, NgClass} from '@angular/common';
+import { NgClass} from '@angular/common';
 import {CardDto, PagedList} from '../../model/model';
 import {CardService} from '../../service/card-service';
 import {LoginService} from '../../service/login-service';
@@ -10,7 +10,7 @@ import {SidebarService} from '../../service/sidebar-service';
 
 @Component({
   selector: 'app-card-list',
-  imports: [Sidebar, NgClass, FormsModule, AsyncPipe],
+  imports: [Sidebar, NgClass, FormsModule],
   templateUrl: './card-list.html',
   styleUrl: './card-list.css'
 })

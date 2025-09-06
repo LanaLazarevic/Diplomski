@@ -5,15 +5,12 @@ import {UserService} from '../../service/user-service';
 import {FormsModule, NgForm} from '@angular/forms';
 import {Sidebar} from '../sidebar/sidebar';
 import {SidebarService} from '../../service/sidebar-service';
-import {AsyncPipe, NgClass} from '@angular/common';
 
 @Component({
   selector: 'app-update-user',
   imports: [
     Sidebar,
     FormsModule,
-    AsyncPipe,
-    NgClass
   ],
   templateUrl: './update-user.html',
   styleUrl: './update-user.css'
