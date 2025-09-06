@@ -42,6 +42,13 @@
           }
         </div>
         <div>
+          <label class="block text-gray-300 mb-2">Account Number</label>
+          <input [(ngModel)]="card.accountNumber" name="accountNumber" #accountNumber="ngModel" type="number" required class="w-full px-3 py-2 rounded bg-[#2a292a] border border-[#4a3a6e] text-white" />
+          @if (accountNumber.invalid && accountNumber.touched) {
+            <div class="text-red-500 text-sm">Account number is required.</div>
+          }
+        </div>
+        <div>
           <label class="block text-gray-300 mb-2">Card Type</label>
           <select [(ngModel)]="card.cardType" name="cardType" class="w-full px-3 py-2 rounded bg-[#2a292a] border border-[#4a3a6e] text-white">
             <option value="debit">Debit</option>

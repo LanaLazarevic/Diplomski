@@ -27,11 +27,17 @@
       }
 
       @if (!loading && !error) {
-        @if (isAdmin()) {
-          <div class="mb-6 text-right">
-            <button (click)="openNewCardForm()"  class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">New Card</button>
+        <div class="mb-6 flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <input type="text" [(ngModel)]="filterJmbg" placeholder="User jmbg" class="px-3 py-2 text-sm rounded bg-[#2a292a] border border-[#4a3a6e] text-white" />
+            <button (click)="applyFilter()" class="px-4 py-2 bg-[#4a3a6e] text-white rounded-lg  hover:bg-[#5d4a85]">Filter</button>
           </div>
-        }
+          @if (isAdmin()) {
+            <div class="text-right">
+              <button (click)="openNewCardForm()"  class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">New Card</button>
+            </div>
+          }
+        </div>
         <div class="space-y-10 mb-8">
           @for (group of groupedCards; track group.userId) {
             <div >

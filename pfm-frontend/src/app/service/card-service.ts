@@ -69,6 +69,7 @@ export class CardService {
       'available-amount': card.availableAmount,
       'reserved-amount': card.reservedAmount,
       'user-jmbg': card.userJmbg,
+      'account-number': card.accountNumber,
       'card-type': card.cardType
     };
     return this.http.post(this.apiUrl, body, {

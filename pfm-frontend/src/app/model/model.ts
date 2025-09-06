@@ -141,6 +141,7 @@ export interface CreateCardDto {
   expirationDate: string;
   availableAmount: number;
   reservedAmount: number;
+  accountNumber: number;
   userJmbg: string;
   cardType: string;
 }

@@ -5,10 +5,11 @@ import {CardDto, PagedList} from '../../model/model';
 import {CardService} from '../../service/card-service';
 import {LoginService} from '../../service/login-service';
 import {Router} from '@angular/router';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-card-list',
-  imports: [Sidebar, NgClass],
+  imports: [Sidebar, NgClass, FormsModule],
   templateUrl: './card-list.html',
   styleUrl: './card-list.css'
 })
@@ -18,6 +19,7 @@ export class CardList implements OnInit {
   loading = false;
   error = false;
   currentPage = 1;
+  filterJmbg = '';
 
   constructor(private service: CardService, private loginService: LoginService, private router: Router) {
   }
@@ -29,7 +31,8 @@ export class CardList implements OnInit {
   loadCards(page: number = 1) {
     this.loading = true;
     this.error = false;
-    this.service.getCards(page).subscribe({
+    const params = this.filterJmbg ? { 'user-jmbg': this.filterJmbg } : undefined;
+    this.service.getCards(page, params).subscribe({
       next: res => {
         this.pagedCards = res;
         this.groupCards();
@@ -160,5 +163,10 @@ export class CardList implements OnInit {
       }
     }
     this.groupedCards = Array.from(map.values());
+  }
+
+  applyFilter() {
+    this.currentPage = 1;
+    this.loadCards();
   }
 }

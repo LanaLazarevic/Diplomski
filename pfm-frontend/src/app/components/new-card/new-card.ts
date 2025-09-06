@@ -21,6 +21,7 @@ export class NewCard {
     availableAmount: 0,
     reservedAmount: 0,
     userJmbg: '',
+    accountNumber: 0,
     cardType: 'debit'
   };
 
@@ -31,7 +32,11 @@ export class NewCard {
       form.form.markAllAsTouched();
       return;
     }
-    this.service.createCard(this.card).subscribe({
+    const payload = {
+      ...this.card,
+      accountNumber: Number(this.card.accountNumber)
+    };
+    this.service.createCard(payload).subscribe({
       next: () => this.router.navigate(['/cards']),
       error: err => console.error('Error creating card:', err)
     });
