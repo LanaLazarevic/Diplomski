@@ -22,6 +22,7 @@ export class AccountList implements OnInit {
   loading = false;
   error = false;
   currentPage = 1;
+  pageSize = 9;
   constructor(private service: AccountService, private loginService: LoginService, private router: Router, public sidebarService: SidebarService) {}
 
   ngOnInit() {
@@ -31,7 +32,7 @@ export class AccountList implements OnInit {
   loadAccounts(page: number = 1) {
     this.loading = true;
     this.error = false;
-    this.service.getAccounts(page).subscribe({
+    this.service.getAccounts(page, this.pageSize).subscribe({
       next: res => {
         this.pagedAccounts = res;
         this.loading = false;

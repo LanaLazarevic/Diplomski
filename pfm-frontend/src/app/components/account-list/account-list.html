@@ -93,6 +93,8 @@
                 <div class="mt-6 pt-4 border-t border-[#3d3c3d] flex justify-end">
                   @if (isAdmin() && account.isActive) {
                     <button (click)="deactivate(account.id)" class="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700">Deactivate</button>
+                  } @else if (account.isActive) {
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium border bg-green-900 text-green-300 border-green-700">Active</span>
                   } @else {
                     <span class="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium border bg-red-900 text-red-300 border-red-700">Inactive</span>
                   }

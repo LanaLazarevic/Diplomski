@@ -11,9 +11,9 @@ export class AccountService {
 
   constructor(private http: HttpClient) {}
 
-  getAccounts(page: number = 1): Observable<PagedList<AccountDto>> {
-    const params = new HttpParams().set('page', page.toString());
-    params.set('page-size', 9);
+  getAccounts(page: number = 1, pagesize: number = 9): Observable<PagedList<AccountDto>> {
+    const params = new HttpParams().set('page', page.toString())
+      .set('page-size', pagesize.toString());
     return this.http
       .get<PagedListRaw<AccountDtoRaw>>(this.apiUrl, { params, headers: this.getHeaders() })
       .pipe(
